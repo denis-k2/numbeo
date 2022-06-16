@@ -47,7 +47,6 @@ def create_numbeo_stats():
 
 if __name__ == "__main__":
     link = pd.read_pickle("./data/numbeo_links.pkl").loc[1, 'link']
-    print(link)
     
     try:
         connection = psycopg2.connect(getenv('POSTGRES_CONN'))
