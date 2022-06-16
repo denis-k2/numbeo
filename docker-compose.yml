@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: pg_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
+    ports:
+      - "5431:5432"
+
+  jupyter:
+    container_name: jupyter
+    build:
+      context: .
+    environment:
+      NB_USER: $NB_USER
+      DE_ENGR: $POSTGRES_USER
+      JUPYTER_TOKEN: $JUPYTER_TOKEN
+      POSTGRES_CONN: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg_container/${POSTGRES_DB}
+    volumes:
+      - ./scripts:/home/jovyan/scripts/
+    ports:
+      - "28888:8888"
