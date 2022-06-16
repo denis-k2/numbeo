@@ -117,7 +117,7 @@ def main_table_into_db(table, index, current_date, data_engr):
 
 if __name__ == "__main__":
     current_date = date.today()
-    data_engr = getenv('DE_ENGR')
+    data_engr = getenv('DATA_ENGR')
     df = pd.read_pickle("./data/numbeo_links.pkl")
     #df = df.iloc[390:396]
     df_summary_empty = create_df_summary_empty()
