@@ -1,11 +1,12 @@
+from os import getenv
+from time import time
+from datetime import datetime, date
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import psycopg2
 from psycopg2 import Error
-from os import getenv
-import time
-from datetime import datetime, date
 
 
 skip_list = [
@@ -92,9 +93,7 @@ def tidy_main_table(table):
 
 
 def main_table_into_db(table, index, current_date, data_engr):
-    # create connection
-    # create cursor
-    param_id = iter([5, 26]) # это Primary Keys (param_id) из numbeo_params для 'Imported Beer (0.33 liter bottle)'
+    param_id = iter([5, 26])  # Primary Keys (param_id) from numbeo_params for 'Imported Beer (0.33 liter bottle)'
     for _, row in table.iterrows():
         if row['Restaurants'] != 'Imported Beer (0.33 liter bottle)' and row['Restaurants'] not in skip_list:
             cursor.execute(
@@ -115,14 +114,13 @@ def main_table_into_db(table, index, current_date, data_engr):
         connection.commit()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     current_date = date.today()
     data_engr = getenv('DATA_ENGR')
     df = pd.read_pickle("./data/numbeo_links.pkl")
-    #df = df.iloc[390:396]
     df_summary_empty = create_df_summary_empty()
 
-    start_time = time.time()
+    start_time = time()
     try:
         connection = psycopg2.connect(getenv('POSTGRES_CONN'))
         cursor = connection.cursor()
@@ -143,6 +141,6 @@ if __name__ == "__main__":
         if connection:
             cursor.close()
             connection.close()
-            finish_time = time.time()
+            finish_time = time()
             print("[INFO] Postgres connection closed.")
             print("Code execution time: ", finish_time - start_time)

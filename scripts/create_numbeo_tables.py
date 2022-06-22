@@ -1,7 +1,8 @@
+from os import getenv
+
 import pandas as pd
 import psycopg2
 from psycopg2 import Error
-from os import getenv
 
 
 def aux_table(link):
@@ -39,13 +40,14 @@ def create_numbeo_params(table):
         cursor.execute(open("./sql/insert_numbeo_params_summary.sql", "r").read())
         connection.commit()
 
+
 def create_numbeo_stats():
     with open("./sql/create_numbeo_stats.sql") as sql_script:
         cursor.execute(sql_script.read())
         connection.commit()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     link = pd.read_pickle("./data/numbeo_links.pkl").loc[1, 'link']
     
     try:
@@ -56,7 +58,6 @@ if __name__ == "__main__":
         create_numbeo_categories(table)
         create_numbeo_params(table)
         create_numbeo_stats()
-        print("[INFO] Done")
     except (Exception, Error) as error:
         print("[INFO] Error:", error)
     finally:
