@@ -5,6 +5,7 @@ CREATE TABLE numbeo_stats (
     cost numeric(9,2),
     range numrange,
     updated_date date,
+    currency text NULL DEFAULT 'USD'::text,
     sys_updated_date date,
     sys_updated_by varchar(30),
     CONSTRAINT PK_stat_id PRIMARY KEY ( stat_id ),
