@@ -2,6 +2,7 @@ import json
 
 from climate_first_scrap import *
 
+
 # Open the file with the corrected links
 with open("./data/correct_urls.json") as file:
     correct_links = json.load(file)

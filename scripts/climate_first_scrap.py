@@ -107,8 +107,7 @@ def fill_params_template_df(city_dict, months_dict, params_dict, df_params_fill)
     #  = df_params_full
 
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     logging.basicConfig(filename="./data/logs.log", filemode="w", level=logging.INFO)
     current_date = date.today()
     data_engr = getenv('DATA_ENGR')
