@@ -7,8 +7,8 @@ from .operator import CurrencyScoopOperator
 
 
 with DAG(
-        dag_id='exchange_rate2',
-        start_date=datetime(2022, 4, 27),
+        dag_id='exchange_rate',
+        start_date=datetime(2022, 7, 1),
         schedule_interval='@daily',
         catchup=False,
 ) as dag:
