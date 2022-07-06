@@ -1,27 +1,87 @@
-version: '3.8'
+version: '3'
+x-airflow-common:
+  &airflow-common
+  image: apache/airflow:2.3.2-python3.10
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${DATA_ENGR}:${DATA_ENGR_PASSWORD}@postgres/${AIRFLOW_DB}
+    AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS: 'false'
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+  user: "${AIRFLOW_UID}"
+  depends_on:
+    &airflow-common-depends-on
+    postgres:
+      condition: service_healthy
+
+x-airflow-image: &airflow_image apache/airflow:2.3.2-python3.10
 
 services:
-  db:
-    container_name: pg_container
-    image: postgres
-    restart: always
+  postgres:
+    container_name: postgres
+    image: postgres:13
     environment:
-      POSTGRES_USER: $POSTGRES_USER
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-      POSTGRES_DB: $POSTGRES_DB
+      POSTGRES_USER: ${DATA_ENGR}
+      POSTGRES_PASSWORD: ${DATA_ENGR_PASSWORD}
+      POSTGRES_DB: ${AIRFLOW_DB}
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
     ports:
-      - "5431:5432"
+      - 5431:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${DATA_ENGR}", "-d", "${AIRFLOW_DB}"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    restart: always
+    depends_on:
+      <<: *airflow-common-depends-on
+
+  airflow-cli:
+    <<: *airflow-common
+    profiles:
+      - debug
+    environment:
+      <<: *airflow-common-env
+      CONNECTION_CHECK_MAX_COUNT: "0"
+    # Workaround for entrypoint issue. See: https://github.com/apache/airflow/issues/16252
+    command:
+      - bash
+      - -c
+      - airflow
 
   jupyter:
     container_name: jupyter
     build:
       context: .
     environment:
-      NB_USER: $NB_USER
-      DATA_ENGR: $POSTGRES_USER
-      JUPYTER_TOKEN: $JUPYTER_TOKEN
-      POSTGRES_CONN: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pg_container/${POSTGRES_DB}
+      NB_USER: ${NB_USER}
+      DATA_ENGR: ${DATA_ENGR}
+      JUPYTER_TOKEN: ${JUPYTER_TOKEN}
+      POSTGRES_CONN: postgresql://${DATA_ENGR}:${DATA_ENGR_PASSWORD}@postgres/${PROJECT_DB}
     volumes:
       - ./scripts:/home/jovyan/scripts/
     ports:
       - "28888:8888"
+
+volumes:
+  postgres-db-volume:
