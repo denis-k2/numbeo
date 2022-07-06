@@ -15,7 +15,7 @@ with DAG(
 
     create_table = PostgresOperator(
         task_id='create_table_task',
-        postgres_conn_id='pg_k2',
+        postgres_conn_id='numbeo_conn_id',
         sql='sql/create_table.sql'
     )
 
@@ -33,7 +33,7 @@ with DAG(
     
     insert_rate = PostgresOperator(
         task_id=f'insert_rate',
-        postgres_conn_id='pg_k2',
+        postgres_conn_id='numbeo_conn_id',
         sql='sql/insert_rate.sql',
         params={
             'base_currency': 'USD',

@@ -12,7 +12,7 @@ class CurrencyScoopOperator(BaseOperator):
     def __init__(
             self,
             base_currency: str,
-            conn_id: str = 'pg_k2',
+            conn_id: str = 'numbeo_conn_id',
             **kwargs) -> None:
         super().__init__(**kwargs)
         self.conn_id = conn_id
