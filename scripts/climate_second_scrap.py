@@ -22,7 +22,7 @@ try:
     columns_list = get_columns_list(params_dict)
     df_params_empty = params_template_df(months_dict, columns_list)
     
-    start_time = time.time()
+    start_time = time()
     for index, url in correct_links.items():
         city_dict = scrap_city_dict(url)
         if not city_dict:
@@ -41,7 +41,7 @@ finally:
     if connection:
         cursor.close()
         connection.close()
-        finish_time = time.time()
+        finish_time = time()
         print("[INFO] Postgres connection closed.")
         print("Code execution time: ", finish_time - start_time)
         logging.info('Finished scraping: %s', finish_time - start_time)
