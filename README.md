@@ -11,11 +11,9 @@ DE creates a Jupyter kernel on the VPS and gives a token to the analyst for acce
 The analyst analyzes the cities in the numbeo index, removes unnecessary data, and creates master tables for further scraping, which the DE performs. The analyst also gets read access to the final database to do SQL Ad-Hoc queries.
 Users get access to the dashboard that Tableau Server outputs on the hosting [relohelper.online](http://relohelper.online/). The dashboard is also duplicated in [Tableau Public](https://tableau.com/). I'm using the trial version of the Tableau server, which is valid for 2 weeks and I don't know what happens next.
 
-Read access to data base: 
+ER-diagram:
 
-The project diagram looks like this:
-
-![er_diagram]()
+![er_diagram](./images/er-diagram.png)
 
 Tableau dasboard screenshot:
 
