@@ -25,9 +25,6 @@ Tableau dashboard screenshot:
 
 ![dashboard](./images/dashboard.jpg)
 
-
-P.S. This is a training project, so I practiced scraping and didn't get the API data.
-
 What are the benefits:
 - General - everything in one place on one page.
 - Numbeo Cost of Living - possibility to compare more than ten cities simultaneously + visual part
