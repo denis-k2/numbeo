@@ -137,3 +137,6 @@ dmypy.json
 # Airflow
 /airflow/logs
 /airflow/plugins
+
+# PyCharm
+.idea
