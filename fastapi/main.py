@@ -109,14 +109,13 @@ def read_country(
     if db_country is None:
         raise HTTPException(status_code=404, detail="Country not found")
     result = jsonable_encoder(db_country)
-    print(result)
     if numbeo_indices:
         db_numbeo_ctry_idx = crud.get_numbeo_ctry_idx(db, alpha_3)
         result["numbeo_indices"] = jsonable_encoder(db_numbeo_ctry_idx)
     if legatum_indices:
         db_legatum_idx = crud.get_legatum_idx(db, alpha_3)
-        res = {}
+        legatum_dict = {}
         for row in jsonable_encoder(db_legatum_idx):
-            res[row["pillar_name"]] = row
-        result["legatum_indices"] = res
+            legatum_dict[row["pillar_name"]] = row
+        result["legatum_indices"] = legatum_dict
     return result

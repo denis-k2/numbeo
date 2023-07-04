@@ -122,21 +122,25 @@ class LegatumRank(BaseModel):
     rank_2019: int
     rank_2020: int
     rank_2021: int
-    score_2007: str
-    score_2008: str
-    score_2009: str
-    score_2010: str
-    score_2011: str
-    score_2012: str
-    score_2013: str
-    score_2014: str
-    score_2015: str
-    score_2016: str
-    score_2017: str
-    score_2018: str
-    score_2019: str
-    score_2020: str
-    score_2021: str
+    rank_2022: int
+    rank_2023: int
+    score_2007: float
+    score_2008: float
+    score_2009: float
+    score_2010: float
+    score_2011: float
+    score_2012: float
+    score_2013: float
+    score_2014: float
+    score_2015: float
+    score_2016: float
+    score_2017: float
+    score_2018: float
+    score_2019: float
+    score_2020: float
+    score_2021: float
+    score_2022: float
+    score_2023: float
 
 
 class LegatumCategory(BaseModel):
