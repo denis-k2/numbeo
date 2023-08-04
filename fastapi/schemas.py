@@ -1,6 +1,6 @@
 from datetime import date
 
-from pydantic import BaseModel, Field
+from pydantic import ConfigDict, BaseModel, Field
 
 
 class NumbeoRange(BaseModel):
@@ -12,43 +12,43 @@ class NumbeoPrice(BaseModel):
     category: str
     params: str
     cost: int | float
-    range: NumbeoRange | None
+    range: NumbeoRange | None = None
 
 
 class NumbeoCost(BaseModel):
     currency: str
     last_update: date
-    prices: list[NumbeoPrice] = Field(max_items=57)
+    prices: list[NumbeoPrice] = Field(max_length=57)
 
 
 class NumbeoCityIndex(BaseModel):
-    cost_of_living_index: float | None
-    rent_index: float | None
-    cost_of_living_plus_rent_index: float | None
-    groceries_index: float | None
-    local_purchasing_power_index: float | None
-    quality_of_life_index: float | None
-    property_price_to_income_ratio: float | None
-    traffic_commute_time_index: float | None
-    climate_index: float | None
-    safety_index: float | None
-    health_care_index: float | None
-    pollution_index: float | None
+    cost_of_living_index: float | None = None
+    rent_index: float | None = None
+    cost_of_living_plus_rent_index: float | None = None
+    groceries_index: float | None = None
+    local_purchasing_power_index: float | None = None
+    quality_of_life_index: float | None = None
+    property_price_to_income_ratio: float | None = None
+    traffic_commute_time_index: float | None = None
+    climate_index: float | None = None
+    safety_index: float | None = None
+    health_care_index: float | None = None
+    pollution_index: float | None = None
 
 
 class ClimateMonth(BaseModel):
-    january: float | None
-    february: float | None
-    march: float | None
-    april: float | None
-    may: float | None
-    june: float | None
-    july: float | None
-    august: float | None
-    september: float | None
-    october: float | None
-    november: float | None
-    december: float | None
+    january: float | None = None
+    february: float | None = None
+    march: float | None = None
+    april: float | None = None
+    may: float | None = None
+    june: float | None = None
+    july: float | None = None
+    august: float | None = None
+    september: float | None = None
+    october: float | None = None
+    november: float | None = None
+    december: float | None = None
 
 
 class AvgClimate(BaseModel):
@@ -74,36 +74,34 @@ class AvgClimate(BaseModel):
 class City(BaseModel):
     city_id: int
     city: str
-    iso_code: str | None
+    iso_code: str | None = None
     alpha_3: str
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CityComplete(City):
     country: str
-    numbeo_cost: NumbeoCost | None
-    numbeo_indices: NumbeoCityIndex | None
-    avg_climate: AvgClimate | None
+    numbeo_cost: NumbeoCost | None = None
+    numbeo_indices: NumbeoCityIndex | None = None
+    avg_climate: AvgClimate | None = None
 
 
 class NumbeoCountryIndex(BaseModel):
-    cost_of_living: float | None
-    rent: float | None
-    cost_of_living_plus_rent: float | None
-    groceries: float | None
-    restaurant_pric: float | None
-    local_purchasing_power: float | None
-    quality_of_lif: float | None
-    purchasing_power: float | None
-    health_car: float | None
-    property_price_to_income_ratio: float | None
-    traffic_commute_tim: float | None
-    pollutio: float | None
-    climat: float | None
-    avg_salary_usd: float | None
-    safety: float | None
+    cost_of_living: float | None = None
+    rent: float | None = None
+    cost_of_living_plus_rent: float | None = None
+    groceries: float | None = None
+    restaurant_pric: float | None = None
+    local_purchasing_power: float | None = None
+    quality_of_lif: float | None = None
+    purchasing_power: float | None = None
+    health_car: float | None = None
+    property_price_to_income_ratio: float | None = None
+    traffic_commute_tim: float | None = None
+    pollutio: float | None = None
+    climat: float | None = None
+    avg_salary_usd: float | None = None
+    safety: float | None = None
 
 
 class LegatumRank(BaseModel):
@@ -161,14 +159,12 @@ class LegatumCategory(BaseModel):
 class Country(BaseModel):
     alpha_3: str
     country: str
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CountryComplete(Country):
-    numbeo_indices: NumbeoCountryIndex | None
-    legatum_indices: LegatumCategory | None
+    numbeo_indices: NumbeoCountryIndex | None = None
+    legatum_indices: LegatumCategory | None = None
 
 
 # dictionary template to create the 'avg_climate' json-response in main.py
