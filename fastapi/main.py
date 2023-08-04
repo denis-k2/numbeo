@@ -49,9 +49,9 @@ def read_country_list(db: Session = Depends(get_db)):
 @app.get("/city/{city_id}", response_model=schemas.CityComplete)
 def read_city(
         city_id: int,
-        numbeo_cost: bool | None = None,
-        numbeo_indices: bool | None = None,
-        avg_climate: bool | None = None,
+        numbeo_cost: Annotated[bool, None] = None,
+        numbeo_indices: Annotated[bool, None] = None,
+        avg_climate: Annotated[bool, None] = None,
         db: Session = Depends(get_db)
 ):
     """
@@ -94,8 +94,8 @@ def read_city(
 @app.get("/country/{alpha_3}", response_model=schemas.CountryComplete)
 def read_country(
         alpha_3: Annotated[str, Path(min_length=3, max_length=3)],
-        numbeo_indices: bool | None = None,
-        legatum_indices: bool | None = None,
+        numbeo_indices: Annotated[bool, None] = None,
+        legatum_indices: Annotated[bool, None] = None,
         db: Session = Depends(get_db)
 ):
     """
