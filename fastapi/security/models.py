@@ -1,9 +1,11 @@
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-from schemas import Roles
 from uuid import UUID, uuid4
 from datetime import datetime
+
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import DeclarativeBase
+
+from security.schemas import Roles
 
 
 class Base(DeclarativeBase):

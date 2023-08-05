@@ -1,4 +1,4 @@
-from database import Base
+from api.database import Base
 
 AvgClimate = Base.classes.avg_climate
 NumbeoCategory = Base.classes.numbeo_category

@@ -3,11 +3,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-import auth
-import crud
-import schemas
-import sendmail
-from database import get_db
+import security.auth as auth
+import security.crud as crud
+import security.schemas as schemas
+import security.sendmail as sendmail
+from security.database import get_db
 
 router = APIRouter(tags=["Auth"])
 
