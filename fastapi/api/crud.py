@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session, aliased
+
 import api.models as models
 
 c = aliased(models.City)
