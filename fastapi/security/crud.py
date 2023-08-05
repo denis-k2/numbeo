@@ -1,7 +1,9 @@
 from sqlalchemy import select, or_
 from sqlalchemy.orm import Session
 
-import auth, models, schemas
+import security.auth as auth
+import security.models as models
+import security.schemas as schemas
 
 
 def create_user(db: Session, user: schemas.UserIn):

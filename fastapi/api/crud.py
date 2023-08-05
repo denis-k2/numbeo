@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session, aliased
-import models
+
+import api.models as models
 
 c = aliased(models.City)
 ns = aliased(models.NumbeoStat)
