@@ -32,8 +32,8 @@ def register_user(user: schemas.UserIn, db: Session = Depends(get_db)):
     return db_user
 
 
-@router.post("/my_token")
-def get_token(
+@router.post("/login")
+def login_user(
         form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
     """
