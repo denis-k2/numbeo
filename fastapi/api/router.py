@@ -6,25 +6,16 @@ from sqlalchemy.orm import Session
 
 import api.crud as crud
 import api.schemas as schemas
-from api.database import SessionLocal
+from api.database import get_db
 from security.auth import check_active
 
 router = APIRouter(tags=["Relohelper API"])
 
 
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 @router.get(
     "/city",
     response_model=list[schemas.City],
-    dependencies=[Depends(check_active)]
+    # dependencies=[Depends(check_active)]
 )
 def read_city_list(
         alpha_3: Annotated[str | None, Query(min_length=3, max_length=3)] = None,
