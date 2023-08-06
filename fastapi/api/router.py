@@ -7,8 +7,9 @@ from sqlalchemy.orm import Session
 import api.crud as crud
 import api.schemas as schemas
 from api.database import SessionLocal
+from security.auth import check_active
 
-router = APIRouter(tags=["Api"])
+router = APIRouter(tags=["Relohelper API"])
 
 
 # Dependency
@@ -20,7 +21,11 @@ def get_db():
         db.close()
 
 
-@router.get("/city", response_model=list[schemas.City])
+@router.get(
+    "/city",
+    response_model=list[schemas.City],
+    dependencies=[Depends(check_active)]
+)
 def read_city_list(
         alpha_3: Annotated[str | None, Query(min_length=3, max_length=3)] = None,
         db: Session = Depends(get_db)):
@@ -37,7 +42,11 @@ def read_city_list(
     return db_city_by_country
 
 
-@router.get("/country", response_model=list[schemas.Country])
+@router.get(
+    "/country",
+    response_model=list[schemas.Country],
+    dependencies=[Depends(check_active)]
+)
 def read_country_list(db: Session = Depends(get_db)):
     """
     Returns a list of all countries with their codes (Alpha-3 ISO 3166-1).
@@ -46,7 +55,11 @@ def read_country_list(db: Session = Depends(get_db)):
     return db_country_list
 
 
-@router.get("/city/{city_id}", response_model=schemas.CityComplete)
+@router.get(
+    "/city/{city_id}",
+    response_model=schemas.CityComplete,
+    dependencies=[Depends(check_active)]
+)
 def read_city(
         city_id: int,
         numbeo_cost: Annotated[bool, None] = None,
@@ -91,7 +104,11 @@ def read_city(
     return result
 
 
-@router.get("/country/{alpha_3}", response_model=schemas.CountryComplete)
+@router.get(
+    "/country/{alpha_3}",
+    response_model=schemas.CountryComplete,
+    dependencies=[Depends(check_active)]
+)
 def read_country(
         alpha_3: Annotated[str, Path(min_length=3, max_length=3)],
         numbeo_indices: Annotated[bool, None] = None,

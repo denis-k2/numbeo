@@ -32,8 +32,8 @@ def register_user(user: schemas.UserIn, db: Session = Depends(get_db)):
     return db_user
 
 
-@router.post("/login")
-def login_user(
+@router.post("/my_token")
+def get_token(
         form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
     """
@@ -77,22 +77,8 @@ def login_user(token: str, db: Session = Depends(get_db)):
     """
 
 
-@router.get("/users")
-def get_all_users(db: Session = Depends(get_db)):
-    """ test """
-    users = crud.get_users(db=db)
-    return users
-
-
-@router.get("/secured", dependencies=[Depends(auth.check_active)])
-def get_all_users(db: Session = Depends(get_db)):
-    """ test """
-    users = crud.get_users(db=db)
-    return users
-
-
 @router.get("/adminsonly", dependencies=[Depends(auth.check_admin)])
-def get_all_users(db: Session = Depends(get_db)):
-    """ test """
+def get_statistics(db: Session = Depends(get_db)):
+    """ **Under development** """
     users = crud.get_users(db=db)
     return users
