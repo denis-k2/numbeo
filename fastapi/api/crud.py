@@ -3,58 +3,60 @@ from sqlalchemy.orm import Session, aliased
 
 import api.models as models
 
-c = aliased(models.City)
-ns = aliased(models.NumbeoStat)
-np = aliased(models.NumbeoParam)
-nc = aliased(models.NumbeoCategory)
-nci = aliased(models.NumbeoIndexByCountry)
+city = aliased(models.City)
+country = aliased(models.Country)
+n_stat = aliased(models.NumbeoStat)
+n_param = aliased(models.NumbeoParam)
+n_cat = aliased(models.NumbeoCategory)
+ni_city = aliased(models.NumbeoIndexByCity)
+ni_country = aliased(models.NumbeoIndexByCountry)
 
 
 def get_city(db: Session, city_id: int):
     stmt = (
-        select(models.City, models.Country.country)
-        .where(models.City.city_id == city_id)
-        .join(models.Country, models.City.alpha_3 == models.Country.alpha_3)
+        select(city, country.country)
+        .where(city.city_id == city_id)
+        .join(country, city.country_code == country.country_code)
     )
     return db.execute(stmt).first()
 
 
 def get_city_list(db: Session):
-    stmt = select(models.City).order_by(models.City.city_id)
+    stmt = select(city).order_by(city.city_id)
     return db.scalars(stmt).all()
 
 
-def get_city_by_country(db: Session, alpha_3: str):
+def get_city_by_country(db: Session, country_code: str):
     stmt = (
-        select(models.City)
-        .where(models.City.alpha_3 == alpha_3.upper())
-        .order_by(models.City.city_id)
+        select(city)
+        .where(city.country_code == country_code.upper())
+        .order_by(city.city_id)
     )
     return db.scalars(stmt).all()
 
 
-def get_country(db: Session, alpha_3: str):
-    return db.get(models.Country, alpha_3.upper())
+def get_country(db: Session, country_code: str):
+    return db.get(models.Country, country_code.upper())  # doesn't work with alias
 
 
 def get_country_list(db: Session):
-    stmt = select(models.Country).order_by(models.Country.alpha_3)
+    stmt = select(country).order_by(country.country_code)
     return db.scalars(stmt).all()
 
 
 def get_numbeo_stat(db: Session, city_id: int):
     stmt = (
-        select(nc.category, np.params, ns.cost, ns.range, ns.updated_date)
-        .where(ns.city_id == city_id)
-        .join(c, ns.city_id == c.city_id)
-        .join(np, ns.param_id == np.param_id)
-        .join(nc, np.category_id == nc.category_id)
+        select(n_cat.category, n_param.param, n_stat.cost, n_stat.range, n_stat.updated_date)
+        .where(n_stat.city_id == city_id)
+        .join(city, n_stat.city_id == city.city_id)
+        .join(n_param, n_stat.param_id == n_param.param_id)
+        .join(n_cat, n_param.category_id == n_cat.category_id)
     )
     return db.execute(stmt).all()
 
 
 def get_numbeo_city_indices(db: Session, city_id: int):
-    stmt = select(models.NumbeoRankByCity).where(models.NumbeoRankByCity.city_id == city_id)
+    stmt = select(ni_city).where(ni_city.city_id == city_id)
     return db.scalar(stmt)
 
 
@@ -66,11 +68,11 @@ def get_climate(db: Session, city_id: int):
     return db.execute(stmt).all()
 
 
-def get_numbeo_ctry_idx(db: Session, alpha_3: int):
-    stmt = select(nci).where(nci.alpha_3 == alpha_3.upper())
+def get_numbeo_ctry_idx(db: Session, country_code: int):
+    stmt = select(ni_country).where(ni_country.country_code == country_code.upper())
     return db.scalar(stmt)
 
 
-def get_legatum_idx(db: Session, area_code: str):
-    stmt = select(models.LegatumIndex).where(models.LegatumIndex.area_code == area_code.upper())
+def get_legatum_idx(db: Session, country_code: str):
+    stmt = select(models.LegatumIndex).where(models.LegatumIndex.country_code == country_code.upper())
     return db.scalars(stmt).all()
