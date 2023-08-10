@@ -1,24 +1,56 @@
 import json
 
-from climate_first_scrap import *
+from selenium import webdriver as wd
+from selenium.webdriver.firefox.service import Service
+
+from climate_first_scrap_SELENIUM import *
+
+
+def scrap_city_dict2(url):
+    city_dict = {}
+    try:
+        # r = requests.get(url, allow_redirects=False).text
+        driver.get(url=url)
+        driver.find_element('xpath', '/html/body/div[1]/div[3]/div[2]/div[1]/a[1]').click()
+        r = driver.page_source
+        soup = BeautifulSoup(r, 'lxml')
+        ul_tags = soup.find_all('ul', class_='list-unstyled mb-0')
+        if not ul_tags:
+            print(f'wrong url: {url}')
+        else:
+            for ul in ul_tags:
+                li_tags = ul.find_all('li')
+                for li in li_tags:
+                    city_dict[li.a.text] = li.span.text
+            for key, value in city_dict.items():
+                city_dict[key] = re.split(r'(\-?\d*\.?\d+|\d+)', value)
+    except Exception as ex:
+        print(f"[INFO] {url} Error: ", ex)
+
+    return city_dict
 
 
 # Open the file with the corrected links
-with open("data/correct_urls_other.json") as file:
+with open("./data/correct_urls_usa.json") as file:
     correct_links = json.load(file)
+print(f'type correct_links: {type(correct_links)}')
 
 if __name__ == '__main__':
-    logging.basicConfig(filename="./data/logs_correct_urls_other.log", filemode="w", level=logging.INFO)
+    logging.basicConfig(filename="./data/logs_correct_urls_usa.log", filemode="w", level=logging.INFO)
     current_date = date.today()
-    data_engr = getenv('DATA_ENGR')
+    # data_engr = getenv('DATA_ENGR')
+    # driver = webdriver.Firefox(executable_path='/home/k2/proj/tests/selenium/firefox/geckodriver')
+    # service = Service('/home/k2/proj/tests/selenium/firefox/geckodriver')
+    # driver = webdriver.Firefox(service=service)
+    driver = wd.Firefox()
+    driver.implicitly_wait(10)
 
     try:
-        # connection = psycopg2.connect(getenv('SQLALCHEMY_RELOHELPER_URL'))
-        connection = psycopg2.connect('postgresql://postgres:5123@localhost:5432/relohelper')
+        connection = psycopg2.connect(dbname="relohelper", user="postgres", password="5123", host="localhost")
         cursor = connection.cursor()
 
         url_instance = 'https://www.weather-atlas.com/en/canada/vancouver-climate?c,mm,mb,km'
-        city_dict_instance = scrap_city_dict(url_instance)
+        city_dict_instance = scrap_city_dict2(url_instance)
         params_dict = get_params_dict(city_dict_instance)
         months_dict = get_months_dict(city_dict_instance)
         columns_list = get_columns_list(params_dict)
@@ -26,7 +58,8 @@ if __name__ == '__main__':
 
         start_time = time()
         for index, url in correct_links.items():
-            city_dict = scrap_city_dict(url)
+            print(url)
+            city_dict = scrap_city_dict2(url)
             if not city_dict:
                 logging.info('city_id:%s:wrong_url:%s', index, url)
             else:
