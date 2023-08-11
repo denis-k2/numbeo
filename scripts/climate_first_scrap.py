@@ -24,10 +24,10 @@ def construct_url(country, state, city):
 
 
 def scrap_city_dict(url):
-    city_dict = {} 
+    city_dict = {}
     try:
         r = requests.get(url, allow_redirects=False).text
-        soup = BeautifulSoup(r, 'lxml')   
+        soup = BeautifulSoup(r, 'lxml')
         ul_tags = soup.find_all('ul', class_='list-unstyled mb-0')
         if not ul_tags:
             print(f'wrong url: {url}')
@@ -40,7 +40,6 @@ def scrap_city_dict(url):
                 city_dict[key] = re.split(r'(\-?\d*\.?\d+|\d+)', value)
     except Exception as ex:
         print(f"[INFO] {url} Error: ", ex)
-    
     return city_dict
 
 
@@ -69,7 +68,7 @@ def get_months_dict(city_dict):
 
 def create_climate_into_db(params_dict):
     climate_params = ''  # Part to insert into SQL table creation
-    comments = ''        # SQL query to add comments to a table
+    comments = ''  # SQL query to add comments to a table
     for key, value in params_dict.items():
         climate_params += f'{value[0]} numeric,'  # numeric(5,1)
         comments += f"COMMENT ON COLUMN avg_climate.{value[0]} IS '{key}, {value[1]}';"
@@ -104,34 +103,34 @@ def fill_params_template_df(city_dict, months_dict, params_dict, df_params_fill)
         num = float(value[1])
         df_params_fill.loc[month, column] = num
     return df_params_fill
-    #  = df_params_full
 
 
 if __name__ == '__main__':
+    DATA_ENGR = getenv('DATA_ENGR')
+    URL = getenv('SQLALCHEMY_RELOHELPER_URL')
+    # ========================== change *.log ========================== #
     logging.basicConfig(filename="./data/logs_other.log", filemode="w", level=logging.INFO)
     current_date = date.today()
-    # data_engr = getenv('DATA_ENGR')
-    data_engr = 'de_k2'
+    # ========================== change *.pkl ========================== #
     df_numbeo = pd.read_pickle("./data/numbeo_links_other.pkl")
     # Sorting to make it easier to find the error in the url
     df_numbeo.sort_values('country', inplace=True)
 
     try:
-        # connection = psycopg2.connect(getenv('SQLALCHEMY_RELOHELPER_URL'))
-        connection = psycopg2.connect('postgresql://postgres:5123@localhost:5432/relohelper')
+        connection = psycopg2.connect(URL)
         cursor = connection.cursor()
-        
+
         # Create 'avg_climate' table in DB
         url_instance = 'https://www.weather-atlas.com/en/canada/vancouver-climate?c,mm,mb,km'
         city_dict_instance = scrap_city_dict(url_instance)
         params_dict = get_params_dict(city_dict_instance)
         months_dict = get_months_dict(city_dict_instance)
         create_climate_into_db(params_dict)
-        
+
         # Scraping into 'avg_climate'
         columns_list = get_columns_list(params_dict)
         df_params_empty = params_template_df(months_dict, columns_list)
-        
+
         start_time = time()
         for index, row in df_numbeo.iterrows():
             url = construct_url(row['country'], row['state_name'], row['city'])
@@ -142,8 +141,7 @@ if __name__ == '__main__':
                 df_params_fill = df_params_empty.copy()
                 df_params_fill['city_id'] = index
                 df_params_full = fill_params_template_df(city_dict, months_dict, params_dict, df_params_fill)
-                # df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), getenv('DATA_ENGR')]
-                df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), 'de_k2']
+                df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), DATA_ENGR]
                 for row in df_params_full.itertuples(index=False):
                     cursor.execute("INSERT INTO avg_climate VALUES %s", (tuple(row),))
                 connection.commit()

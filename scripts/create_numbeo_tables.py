@@ -48,11 +48,11 @@ def create_numbeo_stat():
 
 
 if __name__ == '__main__':
+    URL = getenv('SQLALCHEMY_RELOHELPER_URL')
     link = pd.read_pickle("./data/numbeo_links.pkl").loc[1, 'link']
     
     try:
-        # connection = psycopg2.connect(getenv('SQLALCHEMY_RELOHELPER_URL'))
-        connection = psycopg2.connect('postgresql://postgres:5123@localhost:5432/relohelper')
+        connection = psycopg2.connect(URL)
         cursor = connection.cursor()
         
         table = aux_table(link)

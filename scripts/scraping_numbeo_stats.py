@@ -115,16 +115,16 @@ def main_table_into_db(table, index, current_date, data_engr):
 
 
 if __name__ == '__main__':
+    DATA_ENGR = getenv('DATA_ENGR')
+    URL = getenv('SQLALCHEMY_RELOHELPER_URL')
     current_date = date.today()
-    # data_engr = getenv('DATA_ENGR')
-    data_engr = 'de_k2'
+    # ========================== change *.pkl ========================== #
     df = pd.read_pickle("./data/numbeo_links.pkl")
     df_summary_empty = create_df_summary_empty()
 
     start_time = time()
     try:
-        # connection = psycopg2.connect(getenv('SQLALCHEMY_RELOHELPER_URL'))
-        connection = psycopg2.connect('postgresql://postgres:5123@localhost:5432/relohelper')
+        connection = psycopg2.connect(URL)
         cursor = connection.cursor()
     
         for index, row in df.iterrows():
@@ -136,7 +136,7 @@ if __name__ == '__main__':
             df_main_table = pd.concat([df_main_table, df_summary_complete], ignore_index=True)
             df_main_table = tidy_main_table(df_main_table)
             last_update = last_update_pars(soup)
-            main_table_into_db(df_main_table, index, current_date, data_engr)
+            main_table_into_db(df_main_table, index, current_date, DATA_ENGR)
     except (Exception, Error) as error:
         print("[INFO Error]:", error)
     finally:

@@ -5,7 +5,6 @@ import re
 import logging
 
 import pandas as pd
-# import requests
 from bs4 import BeautifulSoup
 import psycopg2
 from psycopg2 import Error
@@ -44,7 +43,6 @@ def scrap_city_dict(url):
                 city_dict[key] = re.split(r'(\-?\d*\.?\d+|\d+)', value)
     except Exception as ex:
         print(f"[INFO] {url} Error: ", ex)
-
     return city_dict
 
 
@@ -112,23 +110,20 @@ def fill_params_template_df(city_dict, months_dict, params_dict, df_params_fill)
 
 
 if __name__ == '__main__':
+    DATA_ENGR = getenv('DATA_ENGR')
+    URL = getenv('SQLALCHEMY_RELOHELPER_URL')
     # ========================== change *.log ========================== #
     logging.basicConfig(filename="./data/logs_usa.log", filemode="w", level=logging.INFO)
     current_date = date.today()
-    # data_engr = getenv('DATA_ENGR')
-    data_engr = 'de_k2'
-
     # ========================== change *.pkl ========================== #
     df_numbeo = pd.read_pickle("./data/numbeo_links_usa.pkl")
     # Sorting to make it easier to find the error in the url
     df_numbeo.sort_values('country', inplace=True)
-    # driver = webdriver.Firefox(executable_path='./data/firefox/geckodriver')
-    # driver = webdriver.Chrome()
     driver = webdriver.Firefox()
     driver.implicitly_wait(10)
 
     try:
-        connection = psycopg2.connect(dbname="relohelper", user="postgres", password="5123", host="localhost")
+        connection = psycopg2.connect(URL)
         cursor = connection.cursor()
 
         # Create 'avg_climate' table in DB
@@ -152,8 +147,7 @@ if __name__ == '__main__':
                 df_params_fill = df_params_empty.copy()
                 df_params_fill['city_id'] = index
                 df_params_full = fill_params_template_df(city_dict, months_dict, params_dict, df_params_fill)
-                # df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), getenv('DATA_ENGR')]
-                df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), 'de_k2']
+                df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), DATA_ENGR]
                 for row in df_params_full.itertuples(index=False):
                     cursor.execute("INSERT INTO avg_climate VALUES %s", (tuple(row),))
                 connection.commit()
@@ -167,6 +161,3 @@ if __name__ == '__main__':
             print("[INFO] Postgres connection closed.")
             print("Code execution time: ", finish_time - start_time)
             logging.info('Finished scraping: %s', finish_time - start_time)
-
-# postgresql://localhost:5123@postgres/numb
-# conn = psycopg2.connect(dbname="numb", user="postgres", password="5123", host="localhost")

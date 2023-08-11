@@ -1,7 +1,6 @@
 import json
 
 from selenium import webdriver as wd
-from selenium.webdriver.firefox.service import Service
 
 from climate_first_scrap_SELENIUM import *
 
@@ -33,20 +32,18 @@ def scrap_city_dict2(url):
 # Open the file with the corrected links
 with open("./data/correct_urls_usa.json") as file:
     correct_links = json.load(file)
-print(f'type correct_links: {type(correct_links)}')
 
 if __name__ == '__main__':
+    DATA_ENGR = getenv('DATA_ENGR')
+    URL = getenv('SQLALCHEMY_RELOHELPER_URL')
+    # ========================== change *.log ========================== #
     logging.basicConfig(filename="./data/logs_correct_urls_usa.log", filemode="w", level=logging.INFO)
     current_date = date.today()
-    # data_engr = getenv('DATA_ENGR')
-    # driver = webdriver.Firefox(executable_path='/home/k2/proj/tests/selenium/firefox/geckodriver')
-    # service = Service('/home/k2/proj/tests/selenium/firefox/geckodriver')
-    # driver = webdriver.Firefox(service=service)
     driver = wd.Firefox()
     driver.implicitly_wait(10)
 
     try:
-        connection = psycopg2.connect(dbname="relohelper", user="postgres", password="5123", host="localhost")
+        connection = psycopg2.connect(URL)
         cursor = connection.cursor()
 
         url_instance = 'https://www.weather-atlas.com/en/canada/vancouver-climate?c,mm,mb,km'
@@ -66,8 +63,7 @@ if __name__ == '__main__':
                 df_params_fill = df_params_empty.copy()
                 df_params_fill['city_id'] = index
                 df_params_full = fill_params_template_df(city_dict, months_dict, params_dict, df_params_fill)
-                # df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), getenv('DATA_ENGR')]
-                df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), 'de_k2']
+                df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), DATA_ENGR]
                 for row in df_params_full.itertuples(index=False):
                     cursor.execute("INSERT INTO avg_climate VALUES %s", (tuple(row),))
                 connection.commit()

@@ -8,13 +8,14 @@ with open("data/correct_urls_other.json") as file:
     correct_links = json.load(file)
 
 if __name__ == '__main__':
+    DATA_ENGR = getenv('DATA_ENGR')
+    URL = getenv('SQLALCHEMY_RELOHELPER_URL')
+    # ========================== change *.log ========================== #
     logging.basicConfig(filename="./data/logs_correct_urls_other.log", filemode="w", level=logging.INFO)
     current_date = date.today()
-    data_engr = getenv('DATA_ENGR')
 
     try:
-        # connection = psycopg2.connect(getenv('SQLALCHEMY_RELOHELPER_URL'))
-        connection = psycopg2.connect('postgresql://postgres:5123@localhost:5432/relohelper')
+        connection = psycopg2.connect(URL)
         cursor = connection.cursor()
 
         url_instance = 'https://www.weather-atlas.com/en/canada/vancouver-climate?c,mm,mb,km'
@@ -33,8 +34,7 @@ if __name__ == '__main__':
                 df_params_fill = df_params_empty.copy()
                 df_params_fill['city_id'] = index
                 df_params_full = fill_params_template_df(city_dict, months_dict, params_dict, df_params_fill)
-                # df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), getenv('DATA_ENGR')]
-                df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), 'de_k2']
+                df_params_full[['sys_updated_date', 'sys_updated_by']] = [date.today(), DATA_ENGR]
                 for row in df_params_full.itertuples(index=False):
                     cursor.execute("INSERT INTO avg_climate VALUES %s", (tuple(row),))
                 connection.commit()
