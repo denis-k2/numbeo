@@ -6,7 +6,8 @@ RUN conda install --quiet --yes \
     country_converter \
     folium \
     lxml \
-    pandas \
+    pandas==1.4.1 \
+    selenium==4.11.2 \
     psycopg2 && \
     conda clean --all -f -y 
 #    && \
