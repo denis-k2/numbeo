@@ -79,7 +79,7 @@ services:
       JUPYTER_TOKEN: ${JUPYTER_TOKEN}
       POSTGRES_CONN: postgresql://${DATA_ENGR}:${DATA_ENGR_PASSWORD}@postgres/${PROJECT_DB}
     volumes:
-      - ./scripts:/home/jovyan/scripts/
+      - ./scraping:/home/jovyan/scripts/
     ports:
       - "28888:8888"
 

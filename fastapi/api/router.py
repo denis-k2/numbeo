@@ -18,14 +18,14 @@ router = APIRouter(tags=["Relohelper API"])
     # dependencies=[Depends(check_active)]
 )
 def read_city_list(
-        alpha_3: Annotated[str | None, Query(min_length=3, max_length=3)] = None,
+        country_code: Annotated[str | None, Query(min_length=3, max_length=3)] = None,
         db: Session = Depends(get_db)):
     """
     Returns a list of all cities that are in the numbeo index (database).
-    - **alpha_3**: returns a list of cities in the selected country
+    - **country_code**: returns a list of cities in the selected country
     """
-    if alpha_3:
-        db_city_by_country = crud.get_city_by_country(db, alpha_3=alpha_3)
+    if country_code:
+        db_city_by_country = crud.get_city_by_country(db, country_code=country_code)
     else:
         db_city_by_country = crud.get_city_list(db)
     if db_city_by_country is None:
@@ -96,12 +96,12 @@ def read_city(
 
 
 @router.get(
-    "/country/{alpha_3}",
+    "/country/{country_code}",
     response_model=schemas.CountryComplete,
     dependencies=[Depends(check_active)]
 )
 def read_country(
-        alpha_3: Annotated[str, Path(min_length=3, max_length=3)],
+        country_code: Annotated[str, Path(min_length=3, max_length=3)],
         numbeo_indices: Annotated[bool, None] = None,
         legatum_indices: Annotated[bool, None] = None,
         db: Session = Depends(get_db)
@@ -113,15 +113,15 @@ def read_country(
     - **legatum_indices**: returns Legatum's rank and score
       for the country by category and year
     """
-    db_country = crud.get_country(db, alpha_3=alpha_3)
+    db_country = crud.get_country(db, country_code=country_code)
     if db_country is None:
         raise HTTPException(status_code=404, detail="Country not found")
     result = jsonable_encoder(db_country)
     if numbeo_indices:
-        db_numbeo_ctry_idx = crud.get_numbeo_ctry_idx(db, alpha_3)
+        db_numbeo_ctry_idx = crud.get_numbeo_ctry_idx(db, country_code)
         result["numbeo_indices"] = jsonable_encoder(db_numbeo_ctry_idx)
     if legatum_indices:
-        db_legatum_idx = crud.get_legatum_idx(db, alpha_3)
+        db_legatum_idx = crud.get_legatum_idx(db, country_code)
         legatum_dict = {}
         for row in jsonable_encoder(db_legatum_idx):
             legatum_dict[row["pillar_name"]] = row

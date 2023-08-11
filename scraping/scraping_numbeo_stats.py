@@ -93,13 +93,13 @@ def tidy_main_table(table):
 
 
 def main_table_into_db(table, index, current_date, data_engr):
-    param_id = iter([5, 26])  # Primary Keys (param_id) from numbeo_params for 'Imported Beer (0.33 liter bottle)'
+    param_id = iter([5, 26])  # Primary Keys (param_id) from numbeo_param for 'Imported Beer (0.33 liter bottle)'
     for _, row in table.iterrows():
         if row['Restaurants'] != 'Imported Beer (0.33 liter bottle)' and row['Restaurants'] not in skip_list:
             cursor.execute(
-                "INSERT INTO numbeo_stats (city_id, param_id, cost, range, updated_date, sys_updated_date, sys_updated_by) \
+                "INSERT INTO numbeo_stat (city_id, param_id, cost, range, updated_date, sys_updated_date, sys_updated_by) \
                 VALUES (%s, \
-                (SELECT param_id FROM numbeo_params WHERE params = %s), \
+                (SELECT param_id FROM numbeo_param WHERE param = %s), \
                 %s, %s, %s, %s, %s)",
                 (index, row['Restaurants'], row['Edit'], row['Range'], last_update, current_date, data_engr)
             )
@@ -107,7 +107,7 @@ def main_table_into_db(table, index, current_date, data_engr):
             pass
         else:
             cursor.execute(
-                "INSERT INTO numbeo_stats (city_id, param_id, cost, range, updated_date, sys_updated_date, sys_updated_by) \
+                "INSERT INTO numbeo_stat (city_id, param_id, cost, range, updated_date, sys_updated_date, sys_updated_by) \
                 VALUES (%s, %s, %s, %s, %s, %s, %s)",
                 (index, next(param_id), row['Edit'], row['Range'], last_update, current_date, data_engr)
             )
@@ -115,14 +115,16 @@ def main_table_into_db(table, index, current_date, data_engr):
 
 
 if __name__ == '__main__':
+    DATA_ENGR = getenv('DATA_ENGR')
+    URL = getenv('SQLALCHEMY_RELOHELPER_URL')
     current_date = date.today()
-    data_engr = getenv('DATA_ENGR')
+    # ========================== change *.pkl ========================== #
     df = pd.read_pickle("./data/numbeo_links.pkl")
     df_summary_empty = create_df_summary_empty()
 
     start_time = time()
     try:
-        connection = psycopg2.connect(getenv('POSTGRES_CONN'))
+        connection = psycopg2.connect(URL)
         cursor = connection.cursor()
     
         for index, row in df.iterrows():
@@ -134,7 +136,7 @@ if __name__ == '__main__':
             df_main_table = pd.concat([df_main_table, df_summary_complete], ignore_index=True)
             df_main_table = tidy_main_table(df_main_table)
             last_update = last_update_pars(soup)
-            main_table_into_db(df_main_table, index, current_date, data_engr)
+            main_table_into_db(df_main_table, index, current_date, DATA_ENGR)
     except (Exception, Error) as error:
         print("[INFO Error]:", error)
     finally:

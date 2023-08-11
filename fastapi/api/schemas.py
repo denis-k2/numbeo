@@ -10,7 +10,7 @@ class NumbeoRange(BaseModel):
 
 class NumbeoPrice(BaseModel):
     category: str
-    params: str
+    param: str
     cost: int | float
     range: NumbeoRange | None = None
 
@@ -22,18 +22,18 @@ class NumbeoCost(BaseModel):
 
 
 class NumbeoCityIndex(BaseModel):
-    cost_of_living_index: float | None = None
-    rent_index: float | None = None
-    cost_of_living_plus_rent_index: float | None = None
-    groceries_index: float | None = None
-    local_purchasing_power_index: float | None = None
-    quality_of_life_index: float | None = None
+    cost_of_living: float | None = None
+    rent: float | None = None
+    cost_of_living_plus_rent: float | None = None
+    groceries: float | None = None
+    local_purchasing_power: float | None = None
+    quality_of_life: float | None = None
     property_price_to_income_ratio: float | None = None
-    traffic_commute_time_index: float | None = None
-    climate_index: float | None = None
-    safety_index: float | None = None
-    health_care_index: float | None = None
-    pollution_index: float | None = None
+    traffic_commute_time: float | None = None
+    climate: float | None = None
+    safety: float | None = None
+    health_care: float | None = None
+    pollution: float | None = None
 
 
 class ClimateMonth(BaseModel):
@@ -74,8 +74,8 @@ class AvgClimate(BaseModel):
 class City(BaseModel):
     city_id: int
     city: str
-    iso_code: str | None = None
-    alpha_3: str
+    state_code: str | None = None
+    country_code: str
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -91,15 +91,15 @@ class NumbeoCountryIndex(BaseModel):
     rent: float | None = None
     cost_of_living_plus_rent: float | None = None
     groceries: float | None = None
-    restaurant_pric: float | None = None
+    restaurant_price: float | None = None
     local_purchasing_power: float | None = None
-    quality_of_lif: float | None = None
+    quality_of_life: float | None = None
     purchasing_power: float | None = None
-    health_car: float | None = None
+    health_care: float | None = None
     property_price_to_income_ratio: float | None = None
-    traffic_commute_tim: float | None = None
-    pollutio: float | None = None
-    climat: float | None = None
+    traffic_commute_time: float | None = None
+    pollution: float | None = None
+    climate: float | None = None
     avg_salary_usd: float | None = None
     safety: float | None = None
 
@@ -157,7 +157,7 @@ class LegatumCategory(BaseModel):
 
 
 class Country(BaseModel):
-    alpha_3: str
+    country_code: str
     country: str
     model_config = ConfigDict(from_attributes=True)
 
