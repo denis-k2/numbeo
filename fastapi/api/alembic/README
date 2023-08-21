@@ -1,0 +1,8 @@
+Hybrid build multi-database and generic configurations.
+- 'alembic.ini' from multi-database configuration.
+- 'env.py' and 'script.py.mako' from generic configuration.
+
+Commands:
+- alembic -n relohelper revision --autogenerate -m "my message"
+- alembic -n relohelper upgrade head
+- ...
