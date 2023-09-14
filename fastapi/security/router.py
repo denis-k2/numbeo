@@ -8,6 +8,7 @@ import security.crud as crud
 import security.schemas as schemas
 import security.sendmail as sendmail
 from security.database import get_db
+from config import settings
 
 router = APIRouter(tags=["Auth"])
 
@@ -69,7 +70,7 @@ def login_user(token: str, db: Session = Depends(get_db)):
         </head>
         <body>
             <h2>Activation of {username} successful!</h2>
-            <a href="http://relohelper.space:8000/docs">
+            <a href="http://{settings.domain}:8000/docs">
                 Back
             </a>
         </body>

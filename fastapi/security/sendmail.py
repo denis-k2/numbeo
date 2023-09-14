@@ -1,11 +1,13 @@
 import smtplib
 from email.message import EmailMessage
 
-# email = os.getenv("email")
-# email_password = os.getenv("email_pw")
+from config import settings
 
-EMAIL = 'noreply@relohelper.space'
-EMAIL_PASSWORD = 'CH#uC655sksC@#T'
+DOMAIN = settings.domain
+SMTP_HOST = settings.smtp_host
+SMTP_PORT = settings.smtp_port
+EMAIL = settings.email
+EMAIL_PASSWORD = settings.email_password
 
 
 def send_mail(to, token, username):
@@ -21,7 +23,7 @@ def send_mail(to, token, username):
     <div id="box">
       <h2>Hello {username},</h2> 
         <p> Before you can use the API, click 
-            <a href="http://localhost:8000/verify/{token}">
+            <a href="http://{DOMAIN}:8000/verify/{token}">
                 here
             </a> to confirm your registration.
         </p>
@@ -74,9 +76,7 @@ def send_mail(to, token, username):
     msg["To"] = to
 
     # Send the message via our own SMTP server.
-    server = smtplib.SMTP_SSL("smtp.zoho.com", 465)
+    server = smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT)
     server.login(EMAIL, EMAIL_PASSWORD)
     server.send_message(msg)
     server.quit()
-
-# http://relohelper.space:8000/verify/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZW4iLCJlbWFpbCI6ImR4eHg5OTlAZ21haWwuY29tIiwicm9sZSI6InVzZXIiLCJhY3RpdmUiOmZhbHNlLCJleHAiOjE2ODk1NzkxMTd9.LEvyf_iYZqVogpPjk6LwifqtxPfOfIzQ07_mg5h6BaY
