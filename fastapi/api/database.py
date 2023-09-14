@@ -1,9 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:5123@localhost:5432/relohelper"
+from config import settings
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SQLALCHEMY_RELOHELPER_URL = settings.relohelper_url
+
+engine = create_engine(SQLALCHEMY_RELOHELPER_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
