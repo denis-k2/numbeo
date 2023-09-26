@@ -61,9 +61,9 @@ def get_numbeo_city_indices(db: Session, city_id: int):
 
 
 def get_climate(db: Session, city_id: int):
-    stmt = select(models.AvgClimate, models.Month.month_name) \
+    stmt = select(models.AvgClimate, models.MonthAUX.month_name) \
         .where(models.AvgClimate.city_id == city_id) \
-        .join(models.Month, models.AvgClimate.month == models.Month.month_id) \
+        .join(models.MonthAUX, models.AvgClimate.month == models.MonthAUX.month_id) \
         .order_by(models.AvgClimate.month)
     return db.execute(stmt).all()
 
