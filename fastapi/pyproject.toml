@@ -1,22 +1,4 @@
-# === Black ===
-[tool.black]
-line-length = 88
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  | dist
-  | .pytest_cache
-  | .tox
-  | docs
-  | docs_src
-  | .venv
-  | .mypy_cache
-)/
-'''
-
-# === Ruff ===
 [tool.ruff]
-line-length = 88
 select = [
     "E",  # pycodestyle
     "F",  # pyflakes
@@ -27,7 +9,7 @@ select = [
     "SIM",  # flake8-simplify
     "PTH",  # flake8-use-pathlib
     "DTZ",  # flake8-datetimez
-    #    "S",  # flake8-bandit
+    "S",  # flake8-bandit
     "N",  # PEP8-naming
     "I",  # isort
     "PT"  # flake8-pytest-style

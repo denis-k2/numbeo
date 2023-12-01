@@ -1,6 +1,6 @@
 from datetime import date
 
-from pydantic import ConfigDict, BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class NumbeoRange(BaseModel):
@@ -185,23 +185,22 @@ avg_climate_dict = {
     "uv_index": {},
     "cloud_cover": {},
     "visibility": {},
-    "measures":
-        {
-            "high_temp": "Average high temperature, °C",
-            "low_temp": "Average low temperature, °C",
-            "pressure": "Average pressure, mbar",
-            "wind_speed": "Average wind speed, km/h",
-            "humidity": "Average humidity, %",
-            "rainfall": "Average rainfall, mm",
-            "rainfall_days": "Average rainfall days, days",
-            "snowfall": "Average snowfall, mm",
-            "snowfall_days": "Average snowfall days, days",
-            "sea_temp": "Average sea temperature, °C",
-            "daylight": "Average daylight, hours",
-            "sunshine": "Average sunshine, hours",
-            "sunshine_days": "Average sunshine days, days",
-            "uv_index": "Average UV index",
-            "cloud_cover": "Average cloud cover, %",
-            "visibility": "Average visibility, km"
-        }
+    "measures": {
+        "high_temp": "Average high temperature, °C",
+        "low_temp": "Average low temperature, °C",
+        "pressure": "Average pressure, mbar",
+        "wind_speed": "Average wind speed, km/h",
+        "humidity": "Average humidity, %",
+        "rainfall": "Average rainfall, mm",
+        "rainfall_days": "Average rainfall days, days",
+        "snowfall": "Average snowfall, mm",
+        "snowfall_days": "Average snowfall days, days",
+        "sea_temp": "Average sea temperature, °C",
+        "daylight": "Average daylight, hours",
+        "sunshine": "Average sunshine, hours",
+        "sunshine_days": "Average sunshine days, days",
+        "uv_index": "Average UV index",
+        "cloud_cover": "Average cloud cover, %",
+        "visibility": "Average visibility, km",
+    },
 }
