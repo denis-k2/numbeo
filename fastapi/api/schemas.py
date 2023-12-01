@@ -11,7 +11,7 @@ class NumbeoRange(BaseModel):
 class NumbeoPrice(BaseModel):
     category: str
     param: str
-    cost: int | float
+    cost: int | float | None = None
     range: NumbeoRange | None = None
 
 
