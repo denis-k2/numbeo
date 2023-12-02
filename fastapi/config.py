@@ -1,7 +1,7 @@
 from typing import Literal
 
+from pydantic import EmailStr, PostgresDsn, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import computed_field, EmailStr, PostgresDsn
 
 
 class Settings(BaseSettings):
@@ -43,6 +43,17 @@ class Settings(BaseSettings):
     #     database = f"{self.test_db_host}:{self.test_db_port}/{self.test_db_name}"
     #     return f"postgresql+asyncpg://{user}@{database}"
 
+    # OAuth2
+    jwt_secret: str
+    algorithm: Literal[
+        "HS256", "HS384", "HS512",
+        "RS256", "RS384", "RS512",
+        "ES256", "ES384", "ES512",
+        "PS256", "PS384", "PS512",
+    ]  # fmt: skip
+    access_token_expire_minutes: int
+
+    # Registration by Email
     smtp_host: str
     smtp_port: int
     email: EmailStr
@@ -52,9 +63,6 @@ class Settings(BaseSettings):
     # redis_port: int
     #
     # sentry_dsn: str
-
-    # secret_key: str
-    # algorithm: str
 
     model_config = SettingsConfigDict(env_file="../.env", extra="ignore")
 

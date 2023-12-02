@@ -72,7 +72,7 @@ def send_mail(to, token, username):
     )
 
     msg["Subject"] = "Confirmation of your registration"
-    msg["From"] = f'Relohelper <{EMAIL}>'
+    msg["From"] = f"Relohelper <{EMAIL}>"
     msg["To"] = to
 
     # Send the message via our own SMTP server.

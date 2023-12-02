@@ -1,5 +1,5 @@
-from uuid import UUID, uuid4
 from datetime import datetime
+from uuid import UUID, uuid4
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -20,6 +20,5 @@ class User(Base):
     active: Mapped[bool] = mapped_column(default=False)
     role: Mapped[Roles] = mapped_column(default="user")
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow,
-        comment='UTC date and time'
+        default=datetime.utcnow, comment="UTC date and time"
     )

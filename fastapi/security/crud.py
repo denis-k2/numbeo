@@ -1,4 +1,4 @@
-from sqlalchemy import select, or_
+from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 import security.auth as auth
@@ -29,5 +29,5 @@ def get_user_by_username(db: Session, username: str, email: str | None = None):
     stmt = (
         select(models.User)
         .where(or_(models.User.username == username, models.User.email == email))
-    )
+    )  # fmt: skip
     return db.scalar(stmt)
