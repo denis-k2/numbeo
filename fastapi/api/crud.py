@@ -76,7 +76,7 @@ def get_climate(db: Session, city_id: int):
     return db.execute(stmt).all()
 
 
-def get_numbeo_ctry_idx(db: Session, country_code: int):
+def get_numbeo_ctry_idx(db: Session, country_code: str):
     stmt = select(ni_country).where(ni_country.country_code == country_code.upper())
     return db.scalar(stmt)
 

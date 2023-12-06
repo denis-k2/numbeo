@@ -5,10 +5,10 @@ select = [
     "UP", # pyupgrade
     "D",  # pydocstyle
     "B",  # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "SIM",  # flake8-simplify
-    "PTH",  # flake8-use-pathlib
-    "DTZ",  # flake8-datetimez
+    "C4", # flake8-comprehensions
+    "SIM", # flake8-simplify
+    "PTH", # flake8-use-pathlib
+    "DTZ", # flake8-datetimez
     "S",  # flake8-bandit
     "N",  # PEP8-naming
     "I",  # isort
@@ -31,3 +31,17 @@ ignore = [
 
 [tool.ruff.pydocstyle]
 convention = "google"
+
+[tool.mypy]
+explicit_package_bases = true
+plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
+
+[[tool.mypy.overrides]]
+module = ["jose", "passlib.context"]
+ignore_missing_imports = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true

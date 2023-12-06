@@ -131,12 +131,13 @@ dmypy.json
 # Tests
 .test
 
-# VS Code
+# IDE
+.idea
 .vscode
 
 # Airflow
 /airflow/logs
 /airflow/plugins
 
-# PyCharm
-.idea
+# ruff
+.ruff_cache/
