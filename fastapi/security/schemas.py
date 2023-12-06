@@ -2,10 +2,10 @@ from datetime import datetime
 from enum import Enum
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
-class Roles(Enum):
+class Role(Enum):
     user = "user"
     admin = "admin"
 
@@ -14,7 +14,7 @@ class UserIn(BaseModel):
     username: str
     email: EmailStr
     password: str
-    role: Roles = "user"
+    role: Role = Field(default=Role.user)
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -24,6 +24,6 @@ class UserOut(BaseModel):
     email: EmailStr
     hashed_password: str
     active: bool = False
-    role: Roles
+    role: Role
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
