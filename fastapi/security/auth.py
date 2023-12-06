@@ -1,16 +1,15 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from passlib.context import CryptContext
-# from dotenv import find_dotenv, load_dotenv
-#
-# load_dotenv(find_dotenv())
 
-JWT_SECRET = "1RIVFxY0PChhvXxe2alVyjBBGzOy5mVz3BjfRpxJSd18="
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+from config import settings
+
+JWT_SECRET = settings.jwt_secret
+ALGORITHM = settings.algorithm
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")  # tokenUrl="token"
@@ -23,7 +22,8 @@ def create_access_token(user):
             "email": user.email,
             "role": user.role.value,
             "active": user.active,
-            "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
+            "exp": datetime.now(tz=timezone.utc)
+            + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
         }
         return jwt.encode(claims=claims, key=JWT_SECRET, algorithm=ALGORITHM)
     except Exception as ex:
@@ -43,8 +43,8 @@ def verify_token(token):
     try:
         payload = jwt.decode(token, key=JWT_SECRET)
         return payload
-    except:
-        raise Exception("Wrong token")
+    except Exception as exc:
+        raise Exception("Wrong token") from exc
 
 
 def check_active(token: str = Depends(oauth2_scheme)):

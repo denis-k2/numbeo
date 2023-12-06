@@ -10,20 +10,22 @@ def aux_table(link):
     temp_tbl = pd.DataFrame([table.columns], columns=table.columns)
     table = pd.concat([temp_tbl, table]).reset_index(drop=True)
     for index, row in table.iterrows():
-        if row['Edit'] == 'Edit':
-            category = row['Restaurants']
+        if row["Edit"] == "Edit":
+            category = row["Restaurants"]
             table.drop(index, inplace=True)
-        else:    
-            table.at[index, 'categories'] = category
-    
+        else:
+            table.at[index, "categories"] = category
+
     return table
 
 
 def create_numbeo_category(table):
     with open("./sql/create_numbeo_category.sql") as sql_script:
         cursor.execute(sql_script.read())
-        for item in table['categories'].unique():    
-            cursor.execute("INSERT INTO numbeo_category (category) VALUES (%s)", (item,))
+        for item in table["categories"].unique():
+            cursor.execute(
+                "INSERT INTO numbeo_category (category) VALUES (%s)", (item,)
+            )
         cursor.execute("INSERT INTO numbeo_category (category) VALUES ('Summary');")
         connection.commit()
 
@@ -31,13 +33,13 @@ def create_numbeo_category(table):
 def create_numbeo_param(table):
     with open("sql/create_numbeo_param.sql") as sql_script:
         cursor.execute(sql_script.read())
-        for index, row in table.iterrows():    
+        for index, row in table.iterrows():
             cursor.execute(
                 "INSERT INTO numbeo_param (category_id, param) \
                  VALUES ((SELECT category_id FROM numbeo_category WHERE category = %s), %s)",
-                (row.categories, row.Restaurants)
+                (row.categories, row.Restaurants),
             )
-        cursor.execute(open("sql/insert_numbeo_param_summary.sql", "r").read())
+        cursor.execute(open("sql/insert_numbeo_param_summary.sql").read())
         connection.commit()
 
 
@@ -47,14 +49,14 @@ def create_numbeo_stat():
         connection.commit()
 
 
-if __name__ == '__main__':
-    URL = getenv('SQLALCHEMY_RELOHELPER_URL')
-    link = pd.read_pickle("./data/numbeo_links.pkl").loc[1, 'link']
-    
+if __name__ == "__main__":
+    URL = getenv("SQLALCHEMY_RELOHELPER_URL")
+    link = pd.read_pickle("./data/numbeo_links.pkl").loc[1, "link"]
+
     try:
         connection = psycopg2.connect(URL)
         cursor = connection.cursor()
-        
+
         table = aux_table(link)
         create_numbeo_category(table)
         create_numbeo_param(table)

@@ -46,7 +46,13 @@ def get_country_list(db: Session):
 
 def get_numbeo_stat(db: Session, city_id: int):
     stmt = (
-        select(n_cat.category, n_param.param, n_stat.cost, n_stat.range, n_stat.updated_date)
+        select(
+            n_cat.category,
+            n_param.param,
+            n_stat.cost,
+            n_stat.range,
+            n_stat.updated_date,
+        )
         .where(n_stat.city_id == city_id)
         .join(city, n_stat.city_id == city.city_id)
         .join(n_param, n_stat.param_id == n_param.param_id)
@@ -61,18 +67,23 @@ def get_numbeo_city_indices(db: Session, city_id: int):
 
 
 def get_climate(db: Session, city_id: int):
-    stmt = select(models.AvgClimate, models.MonthAUX.month_name) \
-        .where(models.AvgClimate.city_id == city_id) \
-        .join(models.MonthAUX, models.AvgClimate.month == models.MonthAUX.month_id) \
+    stmt = (
+        select(models.AvgClimate, models.MonthAUX.month_name)
+        .where(models.AvgClimate.city_id == city_id)
+        .join(models.MonthAUX, models.AvgClimate.month == models.MonthAUX.month_id)
         .order_by(models.AvgClimate.month)
+    )
     return db.execute(stmt).all()
 
 
-def get_numbeo_ctry_idx(db: Session, country_code: int):
+def get_numbeo_ctry_idx(db: Session, country_code: str):
     stmt = select(ni_country).where(ni_country.country_code == country_code.upper())
     return db.scalar(stmt)
 
 
 def get_legatum_idx(db: Session, country_code: str):
-    stmt = select(models.LegatumIndex).where(models.LegatumIndex.country_code == country_code.upper())
+    stmt = (
+        select(models.LegatumIndex)
+        .where(models.LegatumIndex.country_code == country_code.upper())
+    )  # fmt: skip
     return db.scalars(stmt).all()

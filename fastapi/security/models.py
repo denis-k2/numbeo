@@ -1,9 +1,9 @@
-from uuid import UUID, uuid4
 from datetime import datetime
+from uuid import UUID, uuid4
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
-from security.schemas import Roles
+from security.schemas import Role
 
 
 class Base(DeclarativeBase):
@@ -18,8 +18,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
     hashed_password: Mapped[str]
     active: Mapped[bool] = mapped_column(default=False)
-    role: Mapped[Roles] = mapped_column(default="user")
+    role: Mapped[Role] = mapped_column(default="user")
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.utcnow,
-        comment='UTC date and time'
+        default=datetime.utcnow, comment="UTC date and time"
     )

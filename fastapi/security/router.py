@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -7,16 +7,16 @@ import security.auth as auth
 import security.crud as crud
 import security.schemas as schemas
 import security.sendmail as sendmail
-from security.database import get_db
 from config import settings
+from security.database import get_db
 
 router = APIRouter(tags=["Auth"])
 
 
 @router.post("/register", response_model=schemas.UserOut)
 def register_user(user: schemas.UserIn, db: Session = Depends(get_db)):
-    """
-    To register, enter **username** (unique) and **password**.
+    """To register, enter **username** (unique) and **password**.
+
     - **email** - use a real one. You'll get a verification email.
     - **user** - is default role
     - **admin** - application for admin role will be considered individually
@@ -25,7 +25,7 @@ def register_user(user: schemas.UserIn, db: Session = Depends(get_db)):
     if db_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User or email already exists in the system"
+            detail="User or email already exists in the system",
         )
     db_user = crud.create_user(db=db, user=user)
     token = auth.create_access_token(db_user)
@@ -35,29 +35,25 @@ def register_user(user: schemas.UserIn, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login_user(
-        form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
-    """
-    Log in to get a fresh token. Access token expire is 60 minutes.
-    """
+    """Log in to get a fresh token. Access token expire is 60 minutes."""
     db_user = crud.get_user_by_username(db=db, username=form_data.username)
     if not db_user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Credentials not correct"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Credentials not correct"
         )
 
     if auth.verify_password(form_data.password, db_user.hashed_password):
         token = auth.create_access_token(db_user)
         return {"access_token": token, "token_Type": "bearer"}
     raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Credentials not correct"
+        status_code=status.HTTP_401_UNAUTHORIZED, detail="Credentials not correct"
     )
 
 
 @router.get("/verify/{token}", response_class=HTMLResponse, include_in_schema=False)
-def login_user(token: str, db: Session = Depends(get_db)):
+def verify_users_token(token: str, db: Session = Depends(get_db)):
     payload = auth.verify_token(token)
     username = payload.get("sub")
     db_user = crud.get_user_by_username(db, username)
@@ -80,6 +76,6 @@ def login_user(token: str, db: Session = Depends(get_db)):
 
 @router.get("/adminsonly", dependencies=[Depends(auth.check_admin)])
 def get_statistics(db: Session = Depends(get_db)):
-    """ **Under development** """
+    """**Under development**."""
     users = crud.get_users(db=db)
     return users
