@@ -37,7 +37,7 @@ def read_city_list(
 @router.get(
     "/country",
     response_model=list[schemas.Country],
-    dependencies=[Depends(check_active)],
+    # dependencies=[Depends(check_active)],
 )
 def read_country_list(db: Session = Depends(get_db)):
     """Returns a list of all countries with their codes (Alpha-3 ISO 3166-1)."""
@@ -118,11 +118,13 @@ def read_country(
     result: dict = jsonable_encoder(db_country)
     if numbeo_indices:
         db_numbeo_ctry_idx = crud.get_numbeo_ctry_idx(db, country_code)
-        result["numbeo_indices"] = jsonable_encoder(db_numbeo_ctry_idx)
+        if db_numbeo_ctry_idx is not None:
+            result["numbeo_indices"] = jsonable_encoder(db_numbeo_ctry_idx)
     if legatum_indices:
         db_legatum_idx = crud.get_legatum_idx(db, country_code)
-        legatum_dict = {}
-        for row in jsonable_encoder(db_legatum_idx):
-            legatum_dict[row["pillar_name"]] = row
-        result["legatum_indices"] = legatum_dict
+        if db_legatum_idx:
+            legatum_dict = {}
+            for row in jsonable_encoder(db_legatum_idx):
+                legatum_dict[row["pillar_name"]] = row
+            result["legatum_indices"] = legatum_dict
     return result
