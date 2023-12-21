@@ -76,6 +76,11 @@ class Settings(BaseSettings):
     email: EmailStr
     email_password: str
 
+    # Profiling with PyInstrument
+    profiling: bool
+    interval: float
+    async_mode: Literal["enabled", "disabled", "strict"]
+
     model_config = SettingsConfigDict(env_file="../.env", extra="ignore")
 
 
