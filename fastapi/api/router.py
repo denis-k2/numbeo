@@ -27,10 +27,10 @@ def read_city_list(
     """
     if country_code:
         db_city_by_country = crud.get_city_by_country(db, country_code=country_code)
+        if not db_city_by_country:
+            raise HTTPException(status_code=404, detail="Country not found")
     else:
         db_city_by_country = crud.get_city_list(db)
-    if db_city_by_country is None:
-        raise HTTPException(status_code=404, detail="Country not found")
     return db_city_by_country
 
 
