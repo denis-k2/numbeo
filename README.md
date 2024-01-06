@@ -20,7 +20,7 @@ Here is the ER-diagram.
 ![relohelper_db](./docs/images/relohelper_db.png)
 
 Here is the ER-diagram of **SECURITY** DB which stores FastAPI user data.
-![security_db](./docs/images/security_db.png)
+<img src="./docs/images/security_db.png" width="600">
 
 ### Airflow
 Also, I added the ability to select 5 currencies. The exchange rate is updated every day by Airflow.
