@@ -4,10 +4,9 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from config import settings
-from security.models import Base
-
 sys.path = ["", ".."] + sys.path[1:]
+from config import settings  # noqa: E402
+from security.models import Base  # noqa: E402
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
