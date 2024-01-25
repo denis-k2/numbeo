@@ -39,7 +39,9 @@ async def get_city_by_country(db: Session, country_code: str):
 
 
 async def get_country(db: Session, country_code: str):
-    result = await db.get(models.Country, country_code.upper())  # doesn't work with alias
+    result = await db.get(
+        models.Country, country_code.upper()
+    )  # doesn't work with alias
     return result
 
 

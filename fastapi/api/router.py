@@ -26,7 +26,9 @@ async def read_city_list(
     - **country_code**: returns a list of cities in the selected country
     """
     if country_code:
-        db_city_by_country = await crud.get_city_by_country(db, country_code=country_code)
+        db_city_by_country = await crud.get_city_by_country(
+            db, country_code=country_code
+        )
         if not db_city_by_country:
             raise HTTPException(status_code=404, detail="Country not found")
     else:
@@ -70,7 +72,9 @@ async def read_city(
     result.update(country=db_city[1])
 
     if numbeo_cost:
-        db_numbeo_cost = [row._asdict() for row in await crud.get_numbeo_stat(db, city_id)]
+        db_numbeo_cost = [
+            row._asdict() for row in await crud.get_numbeo_stat(db, city_id)
+        ]
         result["numbeo_cost"] = {
             "currency": "USD",
             "last_update": db_numbeo_cost[0]["updated_date"],
