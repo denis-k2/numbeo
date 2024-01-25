@@ -12,39 +12,44 @@ ni_city = aliased(models.NumbeoIndexByCity)
 ni_country = aliased(models.NumbeoIndexByCountry)
 
 
-def get_city(db: Session, city_id: int):
+async def get_city(db: Session, city_id: int):
     stmt = (
         select(city, country.country)
         .where(city.city_id == city_id)
         .join(country, city.country_code == country.country_code)
     )
-    return db.execute(stmt).first()
+    result = await db.execute(stmt)
+    return result.first()
 
 
-def get_city_list(db: Session):
+async def get_city_list(db: Session):
     stmt = select(city).order_by(city.city_id)
-    return db.scalars(stmt).all()
+    result = await db.scalars(stmt)
+    return result.all()
 
 
-def get_city_by_country(db: Session, country_code: str):
+async def get_city_by_country(db: Session, country_code: str):
     stmt = (
         select(city)
         .where(city.country_code == country_code.upper())
         .order_by(city.city_id)
     )
-    return db.scalars(stmt).all()
+    result = await db.scalars(stmt)
+    return result.all()
 
 
-def get_country(db: Session, country_code: str):
-    return db.get(models.Country, country_code.upper())  # doesn't work with alias
+async def get_country(db: Session, country_code: str):
+    result = await db.get(models.Country, country_code.upper())  # doesn't work with alias
+    return result
 
 
-def get_country_list(db: Session):
+async def get_country_list(db: Session):
     stmt = select(country).order_by(country.country_code)
-    return db.scalars(stmt).all()
+    result = await db.scalars(stmt)
+    return result.all()
 
 
-def get_numbeo_stat(db: Session, city_id: int):
+async def get_numbeo_stat(db: Session, city_id: int):
     stmt = (
         select(
             n_cat.category,
@@ -58,32 +63,37 @@ def get_numbeo_stat(db: Session, city_id: int):
         .join(n_param, n_stat.param_id == n_param.param_id)
         .join(n_cat, n_param.category_id == n_cat.category_id)
     )
-    return db.execute(stmt).all()
+    result = await db.execute(stmt)
+    return result.all()
 
 
-def get_numbeo_city_indices(db: Session, city_id: int):
+async def get_numbeo_city_indices(db: Session, city_id: int):
     stmt = select(ni_city).where(ni_city.city_id == city_id)
-    return db.scalar(stmt)
+    result = await db.scalar(stmt)
+    return result
 
 
-def get_climate(db: Session, city_id: int):
+async def get_climate(db: Session, city_id: int):
     stmt = (
         select(models.AvgClimate, models.MonthAUX.month_name)
         .where(models.AvgClimate.city_id == city_id)
         .join(models.MonthAUX, models.AvgClimate.month == models.MonthAUX.month_id)
         .order_by(models.AvgClimate.month)
     )
-    return db.execute(stmt).all()
+    result = await db.execute(stmt)
+    return result.all()
 
 
-def get_numbeo_ctry_idx(db: Session, country_code: str):
+async def get_numbeo_ctry_idx(db: Session, country_code: str):
     stmt = select(ni_country).where(ni_country.country_code == country_code.upper())
-    return db.scalar(stmt)
+    result = await db.scalar(stmt)
+    return result
 
 
-def get_legatum_idx(db: Session, country_code: str):
+async def get_legatum_idx(db: Session, country_code: str):
     stmt = (
         select(models.LegatumIndex)
         .where(models.LegatumIndex.country_code == country_code.upper())
     )  # fmt: skip
-    return db.scalars(stmt).all()
+    result = await db.scalars(stmt)
+    return result.all()

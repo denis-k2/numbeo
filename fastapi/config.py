@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
     db_scheme: str
+    db_async_scheme: str
     db_host: str
     db_port: int
     db_user: str
@@ -23,6 +24,18 @@ class Settings(BaseSettings):
     def relohelper_url(self) -> str:
         return PostgresDsn.build(
             scheme=self.db_scheme,
+            username=self.db_user,
+            password=self.db_pass,
+            host=self.db_host,
+            port=self.db_port,
+            path=self.db_name_relohelper,
+        ).unicode_string()
+
+    @computed_field  # type: ignore[misc]
+    @property
+    def relohelper_async_url(self) -> str:
+        return PostgresDsn.build(
+            scheme=self.db_async_scheme,
             username=self.db_user,
             password=self.db_pass,
             host=self.db_host,
