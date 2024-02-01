@@ -19,7 +19,7 @@ Number of workers:
 - *12 workers* — experiment
 
 
-### Sync code (Release 0.1.1)
+### Sync code ([v0.1.1](https://github.com/denis-k2/relohelper/releases/tag/v0.1.1))
 
 | **#**                                                                            | **Run command**                                          | **Locust**          | **# Requests** | **# Fails** | **Median (ms)** | **90%ile (ms)**  | **99%ile (ms)** | **Average (ms)** | **Min (ms)** | **Max (ms)** | **Average size (bytes)** | **Current RPS** | **Current Failures/s** |
 |----------------------------------------------------------------------------------|----------------------------------------------------------|---------------------|----------------|-------------|-----------------|------------------|-----------------|------------------|--------------|--------------|--------------------------|-----------------|----------------------|
@@ -31,7 +31,7 @@ Number of workers:
 | [6](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_6.html) | gunicorn main:app -w 9 -k uvicorn.workers.UvicornWorker  | -u 500 -r 2 -t 600s | 78482          | 105         | 40              | 100              | 280             | 55.44            | 2            | 921          | 9777.23                  | 165.3           | 0.6                  |
 | [7](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_7.html) | gunicorn main:app -w 12 -k uvicorn.workers.UvicornWorker | -u 500 -r 2 -t 600s | 78103          | 102         | 40              | 98               | 280             | 53.61            | 2            | 899          | 9803.14                  | 160.7           | 0                    |
 
-### Async code (Release 0.2.0)
+### Async code ([v0.2.0](https://github.com/denis-k2/relohelper/releases/tag/v0.2.0))
 
 | **#**                                                                             | **Run command**                                          | **Locust**          | **# Requests** | **# Fails** | **Median (ms)** | **90%ile (ms)** | **99%ile (ms)** | **Average (ms)** | **Min (ms)** | **Max (ms)** | **Average size (bytes)** | **Current RPS** | **Current Failures/s** |
 |-----------------------------------------------------------------------------------|----------------------------------------------------------|---------------------|----------------|-------------|-----------------|-----------------|-----------------|------------------|--------------|--------------|--------------------------|-----------------|------------------------|
