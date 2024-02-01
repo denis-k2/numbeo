@@ -1,40 +1,51 @@
 Testing is carried out on a laptop with the following characteristics
 - CPU: Ryzen 5 2500u = 4 Cores, 8 Threads, 2.0 -> 3.6 GHz
 - RAM: DDR4, 2400 MHz
-- SSD: Timing buffered disk reads = 504.93 MB/sec
+- SSD: Timing buffered disk reads = 645 MB/sec
 
 
-Whole run commands (examples)
-- **FastAPI**: `uvicorn main:app --workers 4 --log-level critical`, `gunicorn main:app --workers 9 --worker-class uvicorn.workers.UvicornWorker`
-- **Locust**: `locust -H http://127.0.0.1:8000 -u 500 -r 2 -t 420s --autostart --modern-ui`
+- Postgres version: 15.5
+- Locust version: 2.20.1
 
-Number of workers
+
+Whole run commands in Docker Compose (examples):
+- **FastAPI**: `uvicorn main:app --workers 9 --host 0.0.0.0`, `gunicorn main:app -w 9 -k uvicorn.workers.UvicornWorker -b 0.0.0.0`
+- **Locust**: `locust -H http://127.0.0.1:8000 -u 500 -r 2 -t 600s --autostart --modern-ui`
+
+Number of workers:
 - *4 workers* — most common recommendation, regardless of CPU
 - *9 workers* — recommendation from [gunicorn docs](https://docs.gunicorn.org/en/latest/design.html#how-many-workers)
   (4 * 2 + 1 = 9)
 - *12 workers* — experiment
 
 
-### Sync code (Relese 0.1.0)
+### Sync code (Release 0.1.1)
 
-| **#**                                                                 | **Run command**                                                             | **Locust**          | **# Requests** | **# Fails** | **Median (ms)** | **90%ile (ms)** | **99%ile (ms)** | **Average (ms)** | **Min (ms)** | **Max (ms)** | **Average size (bytes)** | **Current RPS** | **Current Failures/s** |
-|-----------------------------------------------------------------------| --------------------------------------------------------------------------- | ------------------- | -------------- | ----------- | --------------- | --------------- | --------------- | ---------------- | ------------ | ------------ | ------------------------ | --------------- | ---------------------- |
-| [1](https://denis-k2.github.io/reports/sync_code/report_1.html)                                 | uvicorn main:app                                                            | -u 180 -r 2 -t 420s | 22061          | 24          | 74              | 200             | 340             | 96.7             | 2            | 565          | 9809.42                  | 58.6            | 0.1                    |
-| [2](https://denis-k2.github.io/reports/sync_code/report_2.html)  | uvicorn main:app                                                            | -u 150 -r 2 -t 420s | 18946          | 14          | 47              | 120             | 290             | 62.62            | 2            | 462          | 9766.72                  | 49.5            | 0                      |
-| [3](https://denis-k2.github.io/reports/sync_code/report_3.html)  | uvicorn main:app --workers 4                                                | -u 500 -r 2 -t 420s | 49177          | 28          | 33              | 85              | 310             | 46.87            | 2            | 636          | 9771.8                   | 163             | 0                      |
-| [4](https://denis-k2.github.io/reports/sync_code/report_4.html)  | uvicorn main:app --workers 4                                                | -u 600 -r 2 -t 420s | 50969          | 100         | 64              | 730             | 1400            | 233.56           | 2            | 4026         | 9737.25                  | 168.2           | 1.1                    |
-| [5](https://denis-k2.github.io/reports/sync_code/report_5.html) | uvicorn main:app --workers 4 --log-level critical                           | -u 500 -r 2 -t 420s | 49098          | 35          | 31              | 78              | 300             | 44.06            | 2            | 468          | 9809.99                  | 163.3           | 0.1                    |
-| [6](https://denis-k2.github.io/reports/sync_code/report_6.html) | uvicorn main:app --workers 9                                                | -u 500 -r 2 -t 420s | 49313          | 18          | 28              | 56              | 290             | 36.44            | 2            | 498          | 9735.94                  | 164.3           | 0                      |
-| [7](https://denis-k2.github.io/reports/sync_code/report_7.html) | uvicorn main:app --workers 9                                                | -u 600 -r 2 -t 420s | 53515          | 91          | 40              | 210             | 560             | 84.52            | 2            | 1046         | 9730.86                  | 188             | 1                      |
-| [8](https://denis-k2.github.io/reports/sync_code/report_8.html) | uvicorn main:app --workers 9 —log-level critical                            | -u 600 -r 2 -t 420s | 54142          | 39          | 29              | 72              | 320             | 42.23            | 1            | 596          | 9746.39                  | 199.8           | 0.1                    |
-| [9](https://denis-k2.github.io/reports/sync_code/report_9.html) | gunicorn main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker  | -u 150 -r 2 -t 420s | 18894          | 17          | 44              | 120             | 260             | 59.52            | 1            | 401          | 9841.12                  | 49.6            | 0                      |
-| [10](https://denis-k2.github.io/reports/sync_code/report_10.html) | gunicorn main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker  | -u 500 -r 2 -t 420s | 49245          | 44          | 33              | 84              | 320             | 47.63            | 2            | 773          | 9747.66                  | 163.5           | 0.5                    |
-| [11](https://denis-k2.github.io/reports/sync_code/report_11.html) | gunicorn main:app --workers 9 --worker-class uvicorn.workers.UvicornWorker  | -u 500 -r 2 -t 420s | 49377          | 27          | 29              | 58              | 290             | 37               | 2            | 467          | 9718.23                  | 163             | 0                      |
-| [12](https://denis-k2.github.io/reports/sync_code/report_12.html) | gunicorn main:app --workers 9 --worker-class uvicorn.workers.UvicornWorker  | -u 600 -r 2 -t 420s | 54299          | 39          | 30              | 62              | 300             | 39.04            | 2            | 453          | 9729.45                  | 199.5           | 0.1                    |
-| [13](https://denis-k2.github.io/reports/sync_code/report_13.html) | uvicorn main:app --workers 12                                               | -u 600 -r 2 -t 420s | 53476          | 79          | 38              | 180             | 520             | 76.51            | 2            | 1275         | 9740.91                  | 194.1           | 0.8                    |
-| [14](https://denis-k2.github.io/reports/sync_code/report_14.html) | uvicorn main:app --workers 12 —log-level critical                           | -u 600 -r 2 -t 420s | 54072          | 22          | 29              | 71              | 320             | 41.38            | 2            | 503          | 9706.6                   | 192.6           | 0                      |
-| [15](https://denis-k2.github.io/reports/sync_code/report_15.html) | gunicorn main:app --workers 12 --worker-class uvicorn.workers.UvicornWorker | -u 600 -r 2 -t 420s | 54194          | 26          | 30              | 59              | 300             | 38.12            | 2            | 485          | 9715.03                  | 195.8           | 0.1                    |
+| **#**                                                                            | **Run command**                                          | **Locust**          | **# Requests** | **# Fails** | **Median (ms)** | **90%ile (ms)**  | **99%ile (ms)** | **Average (ms)** | **Min (ms)** | **Max (ms)** | **Average size (bytes)** | **Current RPS** | **Current Failures/s** |
+|----------------------------------------------------------------------------------|----------------------------------------------------------|---------------------|----------------|-------------|-----------------|------------------|-----------------|------------------|--------------|--------------|--------------------------|-----------------|----------------------|
+| [1](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_1.html) | uvicorn main:app                                         | -u 180 -r 2 -t 420s | 22229          | 29          | 56              | 160              | 320             | 77.35            | 2            | 525          | 9689.62                  | 59.5            | 0.1                  |
+| [2](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_2.html) | uvicorn main:app --workers 4                             | -u 500 -r 2 -t 600s | 77251          | 119         | 49              | 230              | 600             | 96.1             | 3            | 2611         | 9767.05                  | 163.2           | 0.1                  |
+| [3](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_3.html) | uvicorn main:app --workers 9                             | -u 500 -r 2 -t 600s | 77094          | 117         | 57              | 190              | 470             | 88.59            | 2            | 1472         | 9773.07                  | 161.9           | 0.4                  |
+| [4](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_4.html) | gunicorn main:app -w 1 -k uvicorn.workers.UvicornWorker  | -u 180 -r 2 -t 420s | 22059          | 30          | 53              | 150              | 310             | 73.65            | 2            | 467          | 9777.65                  | 57.1            | 0.2                  |
+| [5](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_5.html) | gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker  | -u 500 -r 2 -t 600s | 76045          | 231         | 85              | 330              | 580             | 136.28           | 2            | 1043         | 9764.47                  | 156.8           | 0.4                  |
+| [6](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_6.html) | gunicorn main:app -w 9 -k uvicorn.workers.UvicornWorker  | -u 500 -r 2 -t 600s | 78482          | 105         | 40              | 100              | 280             | 55.44            | 2            | 921          | 9777.23                  | 165.3           | 0.6                  |
+| [7](https://denis-k2.github.io/Relohelper/LocustReports/sync_code/report_7.html) | gunicorn main:app -w 12 -k uvicorn.workers.UvicornWorker | -u 500 -r 2 -t 600s | 78103          | 102         | 40              | 98               | 280             | 53.61            | 2            | 899          | 9803.14                  | 160.7           | 0                    |
+
+### Async code (Release 0.2.0)
+
+| **#**                                                                             | **Run command**                                          | **Locust**          | **# Requests** | **# Fails** | **Median (ms)** | **90%ile (ms)** | **99%ile (ms)** | **Average (ms)** | **Min (ms)** | **Max (ms)** | **Average size (bytes)** | **Current RPS** | **Current Failures/s** |
+|-----------------------------------------------------------------------------------|----------------------------------------------------------|---------------------|----------------|-------------|-----------------|-----------------|-----------------|------------------|--------------|--------------|--------------------------|-----------------|------------------------|
+| [1](https://denis-k2.github.io/Relohelper/LocustReports/async_code/report_1.html) | uvicorn main:app                                         | -u 180 -r 2 -t 420s | 21456          | 49          | 57              | 470             | 840             | 163.96           | 4            | 1740         | 9730.55                  | 55.3            | 0.3                    |
+| [2](https://denis-k2.github.io/Relohelper/LocustReports/async_code/report_2.html) | uvicorn main:app --workers 4                             | -u 500 -r 2 -t 600s | 74705          | 196         | 58              | 640             | 1200            | 208.14           | 3            | 2300         | 9803.03                  | 153.2           | 0.1                    |
+| [3](https://denis-k2.github.io/Relohelper/LocustReports/async_code/report_3.html) | uvicorn main:app --workers 9                             | -u 500 -r 2 -t 600s | 75816          | 468         | 54              | 340             | 1900            | 157.28           | 3            | 3512         | 9665.16                  | 162.6           | 0.4                    |
+| [4](https://denis-k2.github.io/Relohelper/LocustReports/async_code/report_4.html) | gunicorn main:app -w 1 -k uvicorn.workers.UvicornWorker  | -u 180 -r 2 -t 420s | 21317          | 73          | 99              | 570             | 910             | 207.08           | 3            | 1617         | 9817.02                  | 53              | 0.2                    |
+| [5](https://denis-k2.github.io/Relohelper/LocustReports/async_code/report_5.html) | gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker  | -u 500 -r 2 -t 600s | 71544          | 529         | 200             | 880             | 1500            | 332.88           | 2            | 2967         | 9687.34                  | 147             | 1.2                    |
+| [6](https://denis-k2.github.io/Relohelper/LocustReports/async_code/report_6.html) | gunicorn main:app -w 9 -k uvicorn.workers.UvicornWorker  | -u 500 -r 2 -t 600s | 78674          | 100         | 32              | 68              | 210             | 41.49            | 2            | 687          | 9761.63                  | 164.6           | 0.2                    |
+| [7](https://denis-k2.github.io/Relohelper/LocustReports/async_code/report_7.html) | gunicorn main:app -w 12 -k uvicorn.workers.UvicornWorker | -u 500 -r 2 -t 600s | 78543          | 100         | 34              | 76              | 230             | 44.45            | 2            | 889          | 9724.24                  | 163.9           | 0.2                    |
+| [8](https://denis-k2.github.io/Relohelper/LocustReports/async_code/report_8.html) | gunicorn main:app -w 9 -k uvicorn.workers.UvicornWorker  | -u 700 -r 2 -t 600s | 86208          | 19571       | 370             | 980             | 2300            | 455.79           | 2            | 5422         | 7584.62                  | 192.3           | 67.3                   |
 
 
+
+`--log-level critical` — doesn't use 
 
 
