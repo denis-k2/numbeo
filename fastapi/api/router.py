@@ -13,7 +13,7 @@ router = APIRouter(tags=["Relohelper API"])
 
 
 @router.get(
-    "/city",
+    "/cities",
     response_model=list[schemas.City],
     # dependencies=[Depends(check_active)]
 )
@@ -37,7 +37,7 @@ async def read_city_list(
 
 
 @router.get(
-    "/country",
+    "/countries",
     response_model=list[schemas.Country],
     # dependencies=[Depends(check_active)],
 )

@@ -1,0 +1,775 @@
+{
+  "city_id": 83,
+  "city": "Vancouver",
+  "state_code": null,
+  "country_code": "CAN",
+  "country": "Canada",
+  "numbeo_cost": {
+    "currency": "USD",
+    "last_update": "2023-08-01",
+    "prices": [
+      {
+        "category": "Restaurants",
+        "param": "Meal, Inexpensive Restaurant",
+        "cost": 20.87,
+        "range": {
+          "lower": 13.42,
+          "upper": 37.27
+        }
+      },
+      {
+        "category": "Restaurants",
+        "param": "Meal for 2 People, Mid-range Restaurant, Three-course",
+        "cost": 74.54,
+        "range": {
+          "lower": 44.72,
+          "upper": 134.17
+        }
+      },
+      {
+        "category": "Restaurants",
+        "param": "McMeal at McDonalds (or Equivalent Combo Meal)",
+        "cost": 10.44,
+        "range": {
+          "lower": 8.94,
+          "upper": 11.18
+        }
+      },
+      {
+        "category": "Restaurants",
+        "param": "Domestic Beer (0.5 liter draught)",
+        "cost": 5.96,
+        "range": {
+          "lower": 3.73,
+          "upper": 8.94
+        }
+      },
+      {
+        "category": "Restaurants",
+        "param": "Imported Beer (0.33 liter bottle)",
+        "cost": 6.71,
+        "range": {
+          "lower": 5.22,
+          "upper": 9.69
+        }
+      },
+      {
+        "category": "Restaurants",
+        "param": "Cappuccino (regular)",
+        "cost": 4.15,
+        "range": {
+          "lower": 2.98,
+          "upper": 6.71
+        }
+      },
+      {
+        "category": "Restaurants",
+        "param": "Coke/Pepsi (0.33 liter bottle)",
+        "cost": 2.37,
+        "range": {
+          "lower": 1.86,
+          "upper": 3.73
+        }
+      },
+      {
+        "category": "Restaurants",
+        "param": "Water (0.33 liter bottle)",
+        "cost": 1.93,
+        "range": {
+          "lower": 1.49,
+          "upper": 2.98
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Milk (regular), (1 liter)",
+        "cost": 2.24,
+        "range": {
+          "lower": 1.14,
+          "upper": 4.47
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Loaf of Fresh White Bread (500g)",
+        "cost": 3.11,
+        "range": {
+          "lower": 1.49,
+          "upper": 5.22
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Rice (white), (1kg)",
+        "cost": 3.8,
+        "range": {
+          "lower": 1.86,
+          "upper": 8.94
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Eggs (regular) (12)",
+        "cost": 4.37,
+        "range": {
+          "lower": 2.68,
+          "upper": 5.96
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Local Cheese (1kg)",
+        "cost": 12.98,
+        "range": {
+          "lower": 5.96,
+          "upper": 37.27
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Chicken Fillets (1kg)",
+        "cost": 13.14,
+        "range": {
+          "lower": 7.45,
+          "upper": 19.68
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Beef Round (1kg) (or Equivalent Back Leg Red Meat)",
+        "cost": 13.58,
+        "range": {
+          "lower": 7.45,
+          "upper": 20.12
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Apples (1kg)",
+        "cost": 3.98,
+        "range": {
+          "lower": 1.49,
+          "upper": 6.57
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Banana (1kg)",
+        "cost": 1.43,
+        "range": {
+          "lower": 0.75,
+          "upper": 2.99
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Oranges (1kg)",
+        "cost": 3.65,
+        "range": {
+          "lower": 1.49,
+          "upper": 6.57
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Tomato (1kg)",
+        "cost": 4.18,
+        "range": {
+          "lower": 1.49,
+          "upper": 6.56
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Potato (1kg)",
+        "cost": 3.24,
+        "range": {
+          "lower": 1.49,
+          "upper": 4.76
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Onion (1kg)",
+        "cost": 2.55,
+        "range": {
+          "lower": 0.75,
+          "upper": 4.11
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Lettuce (1 head)",
+        "cost": 2.63,
+        "range": {
+          "lower": 1.49,
+          "upper": 3.73
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Water (1.5 liter bottle)",
+        "cost": 1.95,
+        "range": {
+          "lower": 0.75,
+          "upper": 2.98
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Bottle of Wine (Mid-Range)",
+        "cost": 14.91,
+        "range": {
+          "lower": 11.18,
+          "upper": 22.36
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Domestic Beer (0.5 liter bottle)",
+        "cost": 3.02,
+        "range": {
+          "lower": 1.86,
+          "upper": 5.65
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Imported Beer (0.33 liter bottle)",
+        "cost": 3.35,
+        "range": {
+          "lower": 1.64,
+          "upper": 6.71
+        }
+      },
+      {
+        "category": "Markets",
+        "param": "Cigarettes 20 Pack (Marlboro)",
+        "cost": 14.91,
+        "range": {
+          "lower": 13.04,
+          "upper": 16.4
+        }
+      },
+      {
+        "category": "Transportation",
+        "param": "One-way Ticket (Local Transport)",
+        "cost": 2.31,
+        "range": {
+          "lower": 1.86,
+          "upper": 3.35
+        }
+      },
+      {
+        "category": "Transportation",
+        "param": "Monthly Pass (Regular Price)",
+        "cost": 89.44,
+        "range": {
+          "lower": 76.44,
+          "upper": 137.89
+        }
+      },
+      {
+        "category": "Transportation",
+        "param": "Taxi Start (Normal Tariff)",
+        "cost": 2.98,
+        "range": {
+          "lower": 2.5,
+          "upper": 3.73
+        }
+      },
+      {
+        "category": "Transportation",
+        "param": "Taxi 1km (Normal Tariff)",
+        "cost": 1.51,
+        "range": {
+          "lower": 1.16,
+          "upper": 2.61
+        }
+      },
+      {
+        "category": "Transportation",
+        "param": "Taxi 1hour Waiting (Normal Tariff)",
+        "cost": 27.91,
+        "range": {
+          "lower": 22.36,
+          "upper": 48.45
+        }
+      },
+      {
+        "category": "Transportation",
+        "param": "Gasoline (1 liter)",
+        "cost": 1.4,
+        "range": {
+          "lower": 1.21,
+          "upper": 1.53
+        }
+      },
+      {
+        "category": "Transportation",
+        "param": "Volkswagen Golf 1.4 90 KW Trendline (Or Equivalent New Car)",
+        "cost": 22733.63,
+        "range": {
+          "lower": 19379.48,
+          "upper": 26087.77
+        }
+      },
+      {
+        "category": "Transportation",
+        "param": "Toyota Corolla Sedan 1.6l 97kW Comfort (Or Equivalent New Car)",
+        "cost": 19732.55,
+        "range": {
+          "lower": 17143.39,
+          "upper": 25342.4
+        }
+      },
+      {
+        "category": "Utilities (Monthly)",
+        "param": "Basic (Electricity, Heating, Cooling, Water, Garbage) for 85m2 Apartment",
+        "cost": 109.32,
+        "range": {
+          "lower": 59.63,
+          "upper": 216.9
+        }
+      },
+      {
+        "category": "Utilities (Monthly)",
+        "param": "Mobile Phone Monthly Plan with Calls and 10GB+ Data",
+        "cost": 45.37,
+        "range": {
+          "lower": 41,
+          "upper": 74.54
+        }
+      },
+      {
+        "category": "Utilities (Monthly)",
+        "param": "Internet (60 Mbps or More, Unlimited Data, Cable/ADSL)",
+        "cost": 65.5,
+        "range": {
+          "lower": 44.72,
+          "upper": 93.17
+        }
+      },
+      {
+        "category": "Sports And Leisure",
+        "param": "Fitness Club, Monthly Fee for 1 Adult",
+        "cost": 44.64,
+        "range": {
+          "lower": 18.63,
+          "upper": 102.49
+        }
+      },
+      {
+        "category": "Sports And Leisure",
+        "param": "Tennis Court Rent (1 Hour on Weekend)",
+        "cost": 12.24,
+        "range": {
+          "lower": 0,
+          "upper": 20.5
+        }
+      },
+      {
+        "category": "Sports And Leisure",
+        "param": "Cinema, International Release, 1 Seat",
+        "cost": 13.42,
+        "range": {
+          "lower": 11.18,
+          "upper": 16.4
+        }
+      },
+      {
+        "category": "Childcare",
+        "param": "Preschool (or Kindergarten), Full Day, Private, Monthly for 1 Child",
+        "cost": 1044.48,
+        "range": {
+          "lower": 745.36,
+          "upper": 1528
+        }
+      },
+      {
+        "category": "Childcare",
+        "param": "International Primary School, Yearly for 1 Child",
+        "cost": 18277.64,
+        "range": {
+          "lower": 8571.69,
+          "upper": 29814.59
+        }
+      },
+      {
+        "category": "Clothing And Shoes",
+        "param": "1 Pair of Jeans (Levis 501 Or Similar)",
+        "cost": 61.51,
+        "range": {
+          "lower": 37.27,
+          "upper": 104.35
+        }
+      },
+      {
+        "category": "Clothing And Shoes",
+        "param": "1 Summer Dress in a Chain Store (Zara, H&M, ...)",
+        "cost": 43.31,
+        "range": {
+          "lower": 22.36,
+          "upper": 67.08
+        }
+      },
+      {
+        "category": "Clothing And Shoes",
+        "param": "1 Pair of Nike Running Shoes (Mid-Range)",
+        "cost": 91.68,
+        "range": {
+          "lower": 59.63,
+          "upper": 119.26
+        }
+      },
+      {
+        "category": "Clothing And Shoes",
+        "param": "1 Pair of Men Leather Business Shoes",
+        "cost": 127.15,
+        "range": {
+          "lower": 63.36,
+          "upper": 186.34
+        }
+      },
+      {
+        "category": "Rent Per Month",
+        "param": "Apartment (1 bedroom) in City Centre",
+        "cost": 1988.23,
+        "range": {
+          "lower": 1714.34,
+          "upper": 2236.09
+        }
+      },
+      {
+        "category": "Rent Per Month",
+        "param": "Apartment (1 bedroom) Outside of Centre",
+        "cost": 1661.51,
+        "range": {
+          "lower": 1341.66,
+          "upper": 1956.58
+        }
+      },
+      {
+        "category": "Rent Per Month",
+        "param": "Apartment (3 bedrooms) in City Centre",
+        "cost": 3506.32,
+        "range": {
+          "lower": 2981.46,
+          "upper": 4472.19
+        }
+      },
+      {
+        "category": "Rent Per Month",
+        "param": "Apartment (3 bedrooms) Outside of Centre",
+        "cost": 2721.95,
+        "range": {
+          "lower": 2087.02,
+          "upper": 3726.82
+        }
+      },
+      {
+        "category": "Buy Apartment Price",
+        "param": "Price per Square Meter to Buy Apartment in City Centre",
+        "cost": 10960.25,
+        "range": {
+          "lower": 8592.68,
+          "upper": 16046.08
+        }
+      },
+      {
+        "category": "Buy Apartment Price",
+        "param": "Price per Square Meter to Buy Apartment Outside of Centre",
+        "cost": 8180.19,
+        "range": {
+          "lower": 6418.43,
+          "upper": 10028.8
+        }
+      },
+      {
+        "category": "Salaries And Financing",
+        "param": "Average Monthly Net Salary (After Tax)",
+        "cost": 3312.85,
+        "range": null
+      },
+      {
+        "category": "Salaries And Financing",
+        "param": "Mortgage Interest Rate in Percentages (%), Yearly, for 20 Years Fixed-Rate",
+        "cost": 6.52,
+        "range": {
+          "lower": 2.5,
+          "upper": 8.75
+        }
+      },
+      {
+        "category": "Summary",
+        "param": "Family of four estimated monthly costs (without rent)",
+        "cost": 3953.9,
+        "range": null
+      },
+      {
+        "category": "Summary",
+        "param": "A single person estimated monthly costs (without rent)",
+        "cost": 1083.6,
+        "range": null
+      }
+    ]
+  },
+  "numbeo_indices": {
+    "cost_of_living": 73.6,
+    "rent": 53.7,
+    "cost_of_living_plus_rent": 64.1,
+    "groceries": 73.6,
+    "local_purchasing_power": 80.3,
+    "quality_of_life": 162.6,
+    "property_price_to_income_ratio": 14.4,
+    "traffic_commute_time": 37.8,
+    "climate": 91.2,
+    "safety": 59.1,
+    "health_care": 72.5,
+    "pollution": 26.7
+  },
+  "avg_climate": {
+    "high_temp": {
+      "january": 5.3,
+      "february": 5.5,
+      "march": 7.6,
+      "april": 10.3,
+      "may": 14.6,
+      "june": 16.4,
+      "july": 19.3,
+      "august": 19.2,
+      "september": 16.3,
+      "october": 11.8,
+      "november": 7.6,
+      "december": 4.7
+    },
+    "low_temp": {
+      "january": 2.3,
+      "february": 2.2,
+      "march": 3.8,
+      "april": 6.1,
+      "may": 9.1,
+      "june": 10.8,
+      "july": 12.8,
+      "august": 13.4,
+      "september": 11.3,
+      "october": 8.2,
+      "november": 5,
+      "december": 1.9
+    },
+    "pressure": {
+      "january": 1018.1,
+      "february": 1017.5,
+      "march": 1015.7,
+      "april": 1017.1,
+      "may": 1016.5,
+      "june": 1016.5,
+      "july": 1017.3,
+      "august": 1016.3,
+      "september": 1016.2,
+      "october": 1016.8,
+      "november": 1016.3,
+      "december": 1017.9
+    },
+    "wind_speed": {
+      "january": 10.9,
+      "february": 10.8,
+      "march": 10.9,
+      "april": 9.7,
+      "may": 7.6,
+      "june": 7.4,
+      "july": 6.8,
+      "august": 6.3,
+      "september": 7.4,
+      "october": 9.4,
+      "november": 11.4,
+      "december": 11.3
+    },
+    "humidity": {
+      "january": 84,
+      "february": 81,
+      "march": 82,
+      "april": 79,
+      "may": 77,
+      "june": 77,
+      "july": 75,
+      "august": 77,
+      "september": 80,
+      "october": 81,
+      "november": 82,
+      "december": 82
+    },
+    "rainfall": {
+      "january": 196,
+      "february": 113,
+      "march": 146,
+      "april": 90,
+      "may": 52,
+      "june": 44,
+      "july": 24,
+      "august": 41,
+      "september": 82,
+      "october": 140,
+      "november": 209,
+      "december": 188
+    },
+    "rainfall_days": {
+      "january": 19.4,
+      "february": 16.8,
+      "march": 20.6,
+      "april": 18,
+      "may": 15.1,
+      "june": 13.5,
+      "july": 9.3,
+      "august": 8.8,
+      "september": 14.2,
+      "october": 17.2,
+      "november": 20,
+      "december": 19.5
+    },
+    "snowfall": {
+      "january": 52,
+      "february": 67,
+      "march": 25,
+      "april": 1,
+      "may": 0,
+      "june": 0,
+      "july": 0,
+      "august": 0,
+      "september": 0,
+      "october": 0,
+      "november": 6,
+      "december": 41
+    },
+    "snowfall_days": {
+      "january": 1.8,
+      "february": 3.8,
+      "march": 1.6,
+      "april": 0.3,
+      "may": 0,
+      "june": 0,
+      "july": 0,
+      "august": 0,
+      "september": 0,
+      "october": 0,
+      "november": 0.7,
+      "december": 2
+    },
+    "sea_temp": {
+      "january": 6.9,
+      "february": 6.8,
+      "march": 7.1,
+      "april": 7.1,
+      "may": 7.8,
+      "june": 8.3,
+      "july": 9.9,
+      "august": 11.3,
+      "september": 11.3,
+      "october": 10.1,
+      "november": 8.8,
+      "december": 7.7
+    },
+    "daylight": {
+      "january": 8,
+      "february": 10,
+      "march": 11,
+      "april": 13,
+      "may": 15,
+      "june": 16,
+      "july": 15,
+      "august": 14,
+      "september": 12,
+      "october": 10,
+      "november": 9,
+      "december": 8
+    },
+    "sunshine": {
+      "january": 3,
+      "february": 4,
+      "march": 5,
+      "april": 7,
+      "may": 9,
+      "june": 9,
+      "july": 10,
+      "august": 10,
+      "september": 8,
+      "october": 5,
+      "november": 4,
+      "december": 3
+    },
+    "sunshine_days": {
+      "january": 10.3,
+      "february": 8.3,
+      "march": 8.3,
+      "april": 9.6,
+      "may": 13.8,
+      "june": 13.5,
+      "july": 19.1,
+      "august": 19.4,
+      "september": 13.9,
+      "october": 12.1,
+      "november": 8.4,
+      "december": 10
+    },
+    "uv_index": {
+      "january": 2,
+      "february": 2,
+      "march": 3,
+      "april": 3,
+      "may": 4,
+      "june": 4,
+      "july": 5,
+      "august": 4,
+      "september": 3,
+      "october": 3,
+      "november": 2,
+      "december": 2
+    },
+    "cloud_cover": {
+      "january": 59,
+      "february": 55,
+      "march": 56,
+      "april": 49,
+      "may": 39,
+      "june": 39,
+      "july": 26,
+      "august": 26,
+      "september": 35,
+      "october": 45,
+      "november": 56,
+      "december": 59
+    },
+    "visibility": {
+      "january": 9,
+      "february": 9,
+      "march": 9,
+      "april": 9,
+      "may": 9,
+      "june": 10,
+      "july": 10,
+      "august": 10,
+      "september": 9,
+      "october": 9,
+      "november": 9,
+      "december": 9
+    },
+    "measures": {
+      "high_temp": "Average high temperature, °C",
+      "low_temp": "Average low temperature, °C",
+      "pressure": "Average pressure, mbar",
+      "wind_speed": "Average wind speed, km/h",
+      "humidity": "Average humidity, %",
+      "rainfall": "Average rainfall, mm",
+      "rainfall_days": "Average rainfall days, days",
+      "snowfall": "Average snowfall, mm",
+      "snowfall_days": "Average snowfall days, days",
+      "sea_temp": "Average sea temperature, °C",
+      "daylight": "Average daylight, hours",
+      "sunshine": "Average sunshine, hours",
+      "sunshine_days": "Average sunshine days, days",
+      "uv_index": "Average UV index",
+      "cloud_cover": "Average cloud cover, %",
+      "visibility": "Average visibility, km"
+    }
+  }
+}

@@ -20,6 +20,7 @@ httpcore==0.17.0
 httptools==0.5.0
 httpx==0.24.0
 idna==3.4
+iniconfig==2.0.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 Mako==1.2.4
@@ -31,6 +32,7 @@ packaging==23.1
 passlib==1.7.4
 pathspec==0.11.2
 platformdirs==3.10.0
+pluggy==1.4.0
 psycopg2-binary==2.9.6
 pyasn1==0.5.0
 pycparser==2.21
@@ -38,6 +40,7 @@ pydantic==2.1.1
 pydantic-settings==2.0.3
 pydantic_core==2.4.0
 pyinstrument==4.6.1
+pytest==8.0.0
 python-dotenv==1.0.0
 python-jose==3.3.0
 python-multipart==0.0.6

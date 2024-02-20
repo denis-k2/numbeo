@@ -1,7 +1,12 @@
+import sys
 from typing import Literal
 
 from pydantic import EmailStr, PostgresDsn, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+ENV_FILE = "../.env.dev"
+if "pytest" in sys.modules:
+    ENV_FILE = "tests/.env.test"
 
 
 class Settings(BaseSettings):
@@ -55,24 +60,6 @@ class Settings(BaseSettings):
             path=self.db_name_security,
         ).unicode_string()
 
-    # test_db_scheme: str
-    # test_db_host: str
-    # test_db_port: int
-    # test_db_user: str
-    # test_db_pass: str
-    # test_db_name: str
-    #
-    # @property
-    # def test_database_url(self) -> str:
-    #     return PostgresDsn.build(
-    #         scheme=self.test_db_scheme,
-    #         username=self.db_user,
-    #         password=self.db_pass,
-    #         host=self.db_host,
-    #         port=self.db_port,
-    #         path=self.test_db_name,
-    #     ).unicode_string()
-
     # OAuth2
     jwt_secret: str
     algorithm: Literal[
@@ -94,7 +81,13 @@ class Settings(BaseSettings):
     interval: float
     async_mode: Literal["enabled", "disabled", "strict"]
 
-    model_config = SettingsConfigDict(env_file="../.env", extra="ignore")
+    # TestUser for PyTest
+    test_username: str | None = None
+    test_email: EmailStr | None = None
+    test_password: str | None = None
+    test_role: Literal["user", "admin"] | None = None
+
+    model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")
 
 
 settings = Settings()  # type: ignore[call-arg]
