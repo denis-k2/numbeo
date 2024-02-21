@@ -40,7 +40,7 @@ explicit_package_bases = true
 plugins = ["pydantic.mypy", "sqlalchemy.ext.mypy.plugin"]
 
 [[tool.mypy.overrides]]
-module = ["jose", "passlib.context"]
+module = ["jose", "passlib.context", "locust", "requests"]
 ignore_missing_imports = true
 
 [tool.pydantic-mypy]
