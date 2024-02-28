@@ -63,12 +63,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies with ${{ matrix.fastapi-version }}
         run: |
-          python -m pip install --upgrade pip
-          if [ ${{ matrix.fastapi-version }} == "requirements" ]
-          then
-            pip install -r ./fastapi/requirements.txt
-          else
-            pip install -r ./fastapi/requirements.txt --upgrade
+          pip install -r ./fastapi/requirements.txt  
+          if [ ${{ matrix.fastapi-version }} == "upgrade" ]  
+          then  
+            pip install --upgrade fastapi[all] uvicorn sqlalchemy 
           fi
       - name: All
         if: "github.event.inputs.deployment_target == 'all'"
