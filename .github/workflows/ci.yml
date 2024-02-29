@@ -1,0 +1,94 @@
+name: Main CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Choose target
+        required: true
+        default: all
+        type: choice
+        options:
+          - All
+          - tests
+          - ruff_check
+          - ruff_format
+          - mypy
+
+jobs:
+  Tests-and-Checks:
+    runs-on: ubuntu-latest
+    environment: "testing"
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+        fastapi-version: ["requirements", "upgrade"]
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: ${{ vars.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - ${{ vars.PG_PORT }}:5432
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: RelohelperDB Backup Restore
+        uses: tj-actions/pg-restore@v6
+        with:
+          database_url: "postgres://${{ vars.POSTGRES_USER }}:${{ vars.POSTGRES_PASSWORD }}@\
+            ${{ vars.PG_HOST }}:${{ vars.PG_PORT }}/${{ vars.POSTGRES_DB }}"
+          backup_file: "./fastapi/tests/integration/relo_test-dump.sql"
+      - name: Create SecurityDB
+        run: >
+          psql -c "CREATE DATABASE ${{ vars.SECURITY_DB }}"
+          "host=${{ vars.PG_HOST }}
+          port=${{ vars.PG_PORT }}
+          user=${{ vars.POSTGRES_USER }}
+          dbname=${{ vars.POSTGRES_DB }}
+          password=${{ vars.POSTGRES_PASSWORD }}"
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies with ${{ matrix.fastapi-version }}
+        run: |
+          pip install -r ./fastapi/requirements.txt  
+          if [ ${{ matrix.fastapi-version }} == "upgrade" ]  
+          then  
+            pip install --upgrade fastapi[all] uvicorn sqlalchemy 
+          fi
+      - name: All
+        if: "github.event.inputs.deployment_target == 'all'"
+        working-directory: ./fastapi
+        run: |
+          pytest
+          ruff check .
+          ruff format . --check
+          mypy .
+      - name: tests
+        if: "github.event.inputs.deployment_target == 'tests'"
+        working-directory: ./fastapi
+        run: pytest
+      - name: ruff_check
+        if: "github.event.inputs.deployment_target == 'ruff_check'"
+        working-directory: ./fastapi
+        run: ruff check .
+      - name: ruff_format
+        if: "github.event.inputs.deployment_target == 'ruff_format'"
+        working-directory: ./fastapi
+        run: ruff format . --check
+      - name: mypy
+        if: "github.event.inputs.deployment_target == 'mypy'"
+        working-directory: ./fastapi
+        run: mypy .
