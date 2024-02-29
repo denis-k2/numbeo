@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 import api.crud as crud
 import api.schemas as schemas
@@ -19,7 +19,7 @@ router = APIRouter(tags=["Relohelper API"])
 )
 async def read_city_list(
     country_code: Annotated[str | None, Query(min_length=3, max_length=3)] = None,
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Returns a list of all cities that are in the numbeo index (database).
 
@@ -41,7 +41,7 @@ async def read_city_list(
     response_model=list[schemas.Country],
     # dependencies=[Depends(check_active)],
 )
-async def read_country_list(db: Session = Depends(get_db)):
+async def read_country_list(db: AsyncSession = Depends(get_db)):
     """Returns a list of all countries with their codes (Alpha-3 ISO 3166-1)."""
     db_country_list = await crud.get_country_list(db)
     return db_country_list
@@ -57,7 +57,7 @@ async def read_city(
     numbeo_cost: Annotated[bool, None] = None,  # type: ignore[assignment]
     numbeo_indices: Annotated[bool, None] = None,  # type: ignore[assignment]
     avg_climate: Annotated[bool, None] = None,  # type: ignore[assignment]
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Select the desired city from the list by path '/city' and enter its id.
 
@@ -107,7 +107,7 @@ async def read_country(
     country_code: Annotated[str, Path(min_length=3, max_length=3)],
     numbeo_indices: Annotated[bool, None] = None,  # type: ignore[assignment]
     legatum_indices: Annotated[bool, None] = None,  # type: ignore[assignment]
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
 ):
     """Enter the alpha-3 code of the desired country.
 

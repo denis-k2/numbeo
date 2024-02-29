@@ -9,7 +9,7 @@ INTERVAL = settings.interval
 ASYNC_MODE = settings.async_mode
 
 
-def convert_url(request: Request) -> str:
+def convert_url(request) -> str:
     path = request.get("path").lstrip("/").replace("/", "_").lower()
     query = request.get("query_string")
     if len(query) > 0:
