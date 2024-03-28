@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     mode: Literal["DEV", "TEST", "PROD"]
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
+    relo_host: str
+    relo_port: int
+
     db_scheme: str
     db_async_scheme: str
     db_host: str
@@ -86,6 +89,11 @@ class Settings(BaseSettings):
     test_email: EmailStr | None = None
     test_password: str | None = None
     test_role: Literal["user", "admin"] | None = None
+
+    # Observability on Grafana
+    app_name: str | None = None
+    otlp_grpc_endpoint: str | None = None
+    prometheus_multiproc_dir: str | None = None
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")
 
