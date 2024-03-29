@@ -91,8 +91,8 @@ class Settings(BaseSettings):
     test_role: Literal["user", "admin"] | None = None
 
     # Observability on Grafana
-    app_name: str | None = None
-    otlp_grpc_endpoint: str | None = None
+    app_name: str
+    otlp_grpc_endpoint: str
     prometheus_multiproc_dir: str | None = None
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")

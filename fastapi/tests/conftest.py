@@ -74,4 +74,4 @@ def token(client):
     return response.json()["access_token"]
 
 
-trace.get_tracer_provider().shutdown()
+trace.get_tracer_provider().shutdown()  # type: ignore[attr-defined]
