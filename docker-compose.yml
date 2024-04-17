@@ -1,11 +1,11 @@
 version: '3.8'
 x-airflow-common:
   &airflow-common
-  image: apache/airflow:2.3.2-python3.10
+  image: apache/airflow:2.8.4-python3.11
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${DATA_ENGR}:${DATA_ENGR_PASSWORD}@postgres/${AIRFLOW_DB}
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${DB_USER}:${DB_PASS}@postgres/${AIRFLOW_DB}
     AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
@@ -13,6 +13,7 @@ x-airflow-common:
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/config:/opt/airflow/config
     - ./airflow/plugins:/opt/airflow/plugins
   user: "${AIRFLOW_UID}"
   depends_on:
@@ -20,20 +21,28 @@ x-airflow-common:
     postgres:
       condition: service_healthy
 
-x-airflow-image: &airflow_image apache/airflow:2.3.2-python3.10
+x-logging: &default-logging
+  driver: loki
+  options:
+    loki-url: 'http://localhost:3100/api/prom/push'
+    loki-pipeline-stages: |
+      - multiline:
+          firstline: '^\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}:\d{2}'
+          max_wait_time: 3s
+      - regex:
+          expression: '^(?P<time>\d{4}-\d{2}-\d{2} \d{1,2}:\d{2}:\d{2},d{3}) (?P<message>(?s:.*))$$'
 
 services:
   postgres:
-    container_name: postgres
     image: postgres:15.5
     env_file:
-      - .env
+      - stack.env
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
+      - /home/k2/relohelper-data/Relo_DB:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - "5432:5432"
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "${DATA_ENGR}", "-d", "${AIRFLOW_DB}"]
+      test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${AIRFLOW_DB}" ]
       interval: 5s
       retries: 5
     restart: always
@@ -61,37 +70,79 @@ services:
     environment:
       <<: *airflow-common-env
       CONNECTION_CHECK_MAX_COUNT: "0"
-    # Workaround for entrypoint issue. See: https://github.com/apache/airflow/issues/16252
     command:
       - bash
       - -c
       - airflow
 
   jupyter:
-    container_name: jupyter
-    build:
-      context: scraping/
+    image: denk2/relo_jupyter:0.1.0
     environment:
       NB_USER: ${NB_USER}
-      DATA_ENGR: ${DATA_ENGR}
+      DATA_ENGR: ${DB_USER}
       JUPYTER_TOKEN: ${JUPYTER_TOKEN}
-      POSTGRES_CONN: postgresql://${DATA_ENGR}:${DATA_ENGR_PASSWORD}@postgres/${PROJECT_DB}
+      POSTGRES_CONN: postgresql://${DB_USER}:${DB_PASS}@postgres/${DB_NAME_RELOHELPER}
     volumes:
-      - ./scraping:/home/jovyan/scripts/
+      - /home/k2/Relohelper/scraping:/home/jovyan/scripts/
     ports:
       - "8888:8888"
-
-  fastapi:
-    container_name: fastapi
-    build:
-      context: fastapi/
-    command: gunicorn main:app -w 9 -k uvicorn.workers.UvicornWorker -b 0.0.0.0
-    env_file:
-      - .env
-    ports:
-      - "8000:8000"
     depends_on:
       - postgres
+    restart: always
 
-volumes:
-  postgres-db-volume:
+  relohelper:
+    image: denk2/relohelper:v0.3.0
+    command: python main.py
+    env_file:
+      - stack.env
+    ports:
+      - "80:8000"
+    depends_on:
+      - loki
+      - postgres
+      - prometheus
+    environment:
+      APP_NAME: "relohelper"
+    logging: *default-logging
+
+  loki:
+    image: grafana/loki:2.9.3
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+
+  prometheus:
+    image: prom/prometheus:v2.48.1
+    ports:
+      - "9090:9090"
+    volumes:
+      - /home/k2/Relohelper/fastapi/etc/prometheus:/workspace
+    command:
+      - --config.file=/workspace/prometheus.yml
+      - --enable-feature=exemplar-storage
+    depends_on:
+      - loki
+    logging: *default-logging
+
+  tempo:
+    image: grafana/tempo:2.3.1
+    command: [ "--target=all", "--storage.trace.backend=local", "--storage.trace.local.path=/var/tempo", "--auth.enabled=false" ]
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+    depends_on:
+      - loki
+    logging: *default-logging
+
+  grafana:
+    image: grafana/grafana:10.2.3
+    ports:
+      - "3000:3000"
+    volumes:
+      - /home/k2/Relohelper/fastapi/etc/grafana/:/etc/grafana/provisioning/datasources
+      - /home/k2/Relohelper/fastapi/etc/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - /home/k2/Relohelper/fastapi/etc/dashboards:/etc/grafana/dashboards
+    depends_on:
+      - loki
+      - prometheus
+    logging: *default-logging

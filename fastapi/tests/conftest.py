@@ -4,6 +4,7 @@ import pytest
 from alembic import command as alembic_command
 from alembic.config import Config
 from fastapi.testclient import TestClient
+from opentelemetry import trace
 
 sys.path = ["", ".."] + sys.path[1:]
 from config import settings  # noqa: E402
@@ -71,3 +72,6 @@ def token(client):
         data={"username": settings.test_username, "password": settings.test_password},
     )
     return response.json()["access_token"]
+
+
+trace.get_tracer_provider().shutdown()  # type: ignore[attr-defined]

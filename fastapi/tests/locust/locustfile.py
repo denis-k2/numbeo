@@ -6,7 +6,7 @@ from locust import HttpUser, between, events, task
 
 @events.test_start.add_listener
 def on_locust_init(environment, **kwargs):
-    response = requests.get("http://localhost:8000/country", timeout=5)
+    response = requests.get("http://localhost:8000/countries", timeout=5)
     countries = [country["country_code"] for country in response.json()]
     environment.parsed_options.country_codes = countries
 
@@ -47,8 +47,8 @@ class User(HttpUser):
 
     @task
     def read_countries(self):
-        self.client.get("/country", name="/country")
+        self.client.get("/countries", name="/countries")
 
     @task
     def read_cities(self):
-        self.client.get("/city", name="/city")
+        self.client.get("/cities", name="/cities")
