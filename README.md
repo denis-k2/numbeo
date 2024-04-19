@@ -10,7 +10,7 @@
 - [Storage](#Storage)
 - [Airflow](#Airflow)
 - [FastAPI](#FastAPI)
-  - [Locust performance testing](#Locust performance testing)
+  - [Locust performance testing](#Locust-performance-testing)
   - [Observability](#Observability)
 - [Tableau](#Tableau)
 - [Benefits](#What-are-the-benefits)
