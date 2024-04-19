@@ -3,7 +3,8 @@ from email.message import EmailMessage
 
 from config import settings
 
-DOMAIN = settings.domain
+DOMAIN_NAME = settings.domain_name
+DOMAIN_PORT = settings.domain_port
 SMTP_HOST = settings.smtp_host
 SMTP_PORT = settings.smtp_port
 EMAIL = settings.email
@@ -23,7 +24,7 @@ def send_mail(to, token, username):
     <div id="box">
       <h2>Hello {username},</h2> 
         <p> Before you can use the API, click 
-            <a href="http://{DOMAIN}:8000/verify/{token}">
+            <a href="http://{DOMAIN_NAME}:{DOMAIN_PORT}/verify/{token}">
                 here
             </a> to confirm your registration.
         </p>

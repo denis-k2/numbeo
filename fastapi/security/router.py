@@ -66,7 +66,7 @@ def verify_users_token(token: str, db: Session = Depends(get_db)):
         </head>
         <body>
             <h2>Activation of {username} successful!</h2>
-            <a href="http://{settings.domain}:8000/docs">
+            <a href="http://{settings.domain_name}:{settings.domain_port}/docs">
                 Back
             </a>
         </body>

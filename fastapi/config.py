@@ -10,7 +10,8 @@ if "pytest" in sys.modules:
 
 
 class Settings(BaseSettings):
-    domain: str
+    domain_name: str
+    domain_port: int
 
     mode: Literal["DEV", "TEST", "PROD"]
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
