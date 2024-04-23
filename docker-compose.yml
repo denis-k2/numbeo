@@ -1,26 +1,4 @@
 version: '3.8'
-x-airflow-common:
-  &airflow-common
-  image: apache/airflow:2.8.4-python3.11
-  environment:
-    &airflow-common-env
-    AIRFLOW__CORE__EXECUTOR: LocalExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${DB_USER}:${DB_PASS}@postgres/${AIRFLOW_DB}
-    AIRFLOW__CORE__FERNET_KEY: ${FERNET_KEY}
-    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-    AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS: 'false'
-  volumes:
-    - ./airflow/dags:/opt/airflow/dags
-    - ./airflow/logs:/opt/airflow/logs
-    - ./airflow/config:/opt/airflow/config
-    - ./airflow/plugins:/opt/airflow/plugins
-  user: "${AIRFLOW_UID}"
-  depends_on:
-    &airflow-common-depends-on
-    postgres:
-      condition: service_healthy
-
 x-logging: &default-logging
   driver: loki
   options:
@@ -38,7 +16,7 @@ services:
     env_file:
       - stack.env
     volumes:
-      - /home/k2/relohelper-data/Relo_DB:/var/lib/postgresql/data
+      - ${PROJ_DATA_DIR}/Relo_DB:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -47,43 +25,22 @@ services:
       retries: 5
     restart: always
 
-  airflow-webserver:
-    <<: *airflow-common
-    command: webserver
+  airflow:
+    image: apache/airflow:2.9.0-python3.11
+    volumes:
+      - ${PROJ_DIR}/airflow/:/opt/airflow/
     ports:
-      - 8080:8080
-    restart: always
-    depends_on:
-      <<: *airflow-common-depends-on
-
-  airflow-scheduler:
-    <<: *airflow-common
-    command: scheduler
-    restart: always
-    depends_on:
-      <<: *airflow-common-depends-on
-
-  airflow-cli:
-    <<: *airflow-common
-    profiles:
-      - debug
-    environment:
-      <<: *airflow-common-env
-      CONNECTION_CHECK_MAX_COUNT: "0"
-    command:
-      - bash
-      - -c
-      - airflow
+      - "8080:8080"
+    env_file:
+      - stack.env
+    command: airflow standalone
 
   jupyter:
     image: denk2/relo_jupyter:0.1.0
-    environment:
-      NB_USER: ${NB_USER}
-      DATA_ENGR: ${DB_USER}
-      JUPYTER_TOKEN: ${JUPYTER_TOKEN}
-      POSTGRES_CONN: postgresql://${DB_USER}:${DB_PASS}@postgres/${DB_NAME_RELOHELPER}
+    env_file:
+      - stack.env
     volumes:
-      - /home/k2/Relohelper/scraping:/home/jovyan/scripts/
+      - ${PROJ_DIR}/scraping:/home/jovyan/scripts/
     ports:
       - "8888:8888"
     depends_on:
@@ -101,8 +58,6 @@ services:
       - loki
       - postgres
       - prometheus
-    environment:
-      APP_NAME: "relohelper"
     logging: *default-logging
 
   loki:
@@ -116,7 +71,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - /home/k2/Relohelper/fastapi/etc/prometheus:/workspace
+      - ${PROJ_DIR}/fastapi/etc/prometheus:/workspace
     command:
       - --config.file=/workspace/prometheus.yml
       - --enable-feature=exemplar-storage
@@ -139,9 +94,9 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - /home/k2/Relohelper/fastapi/etc/grafana/:/etc/grafana/provisioning/datasources
-      - /home/k2/Relohelper/fastapi/etc/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
-      - /home/k2/Relohelper/fastapi/etc/dashboards:/etc/grafana/dashboards
+      - ${PROJ_DIR}/fastapi/etc/grafana/:/etc/grafana/provisioning/datasources
+      - ${PROJ_DIR}/fastapi/etc/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml
+      - ${PROJ_DIR}/fastapi/etc/dashboards:/etc/grafana/dashboards
     depends_on:
       - loki
       - prometheus
