@@ -3,7 +3,7 @@
 **Architecture of the project**
 ![architecture](./docs/images/architecture.png)
 
-[relohelper.space/docs](http://relohelper.space/docs)  — FastAPI Swagger UI
+[relohelper.xyz/docs](http://relohelper.xyz/docs)  — FastAPI Swagger UI
 
 **Content**
 - [Scraping](#Scraping)
