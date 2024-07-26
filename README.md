@@ -30,7 +30,7 @@ Here is the ER-diagram of **SECURITY** DB which stores FastAPI user data.
 Also, I added the ability to select 5 currencies. The exchange rate is updated every day by Airflow.
 
 ### FastAPI
-Thanks to FastAPI you have the opportunity to receive collected information on a single city or country in JSON format. To get more data, you need to register on [relohelper.space](http://relohelper.space/docs) and confirm your email (check your spam folder).
+Thanks to FastAPI you have the opportunity to receive collected information on a single city or country in JSON format. To get more data, you need to register on [relohelper.xyz](http://relohelper.xyz/docs) and confirm your email (check your spam folder).
 
 - #### Locust performance testing
   I made one release ([v0.1.1](https://github.com/denis-k2/relohelper/releases/tag/v0.1.1)) with the **synchronous** code, another release ([v0.2.0](https://github.com/denis-k2/relohelper/releases/tag/v0.2.0)) with **asynchronous** code. I also compared their work under load with different settings with *Locust*. The comparison results are [here](https://github.com/denis-k2/relohelper/blob/main/fastapi/tests/locust/summary_table.md).
