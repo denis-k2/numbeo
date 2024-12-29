@@ -1,0 +1,2 @@
+fastapi/tests/profiling/sync_code_reports/** linguist-vendored
+fastapi/tests/locust/reports/** linguist-vendored
